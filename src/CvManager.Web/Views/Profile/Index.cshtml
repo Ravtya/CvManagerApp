@@ -1,0 +1,140 @@
+@model ProfileDto
+@{
+    ViewData["Title"] = Model.IsOwnProfile ? L["Shared_Profile"] : $"{L["Shared_Profile"]}: {Model.ProfileEmail}";
+
+    var meFieldsByCategory = Model.MeFieldsById.Values
+        .GroupBy(f => (f.CategoryId, f.CategoryName))
+        .OrderBy(g => g.Key.CategoryName)
+        .ToDictionary(g => g.Key, g => g.OrderBy(f => f.Name).ToList());
+
+    var infoFieldsByCategory = Model.InfoFieldsById.Values
+        .GroupBy(f => f.CategoryId)
+        .ToDictionary(g => g.Key, g => g.OrderBy(f => f.Name).ToList());
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+    <h1 class="h4 mb-0">@(Model.IsOwnProfile ? L["Shared_Profile"] : Model.ProfileEmail)</h1>
+    <div class="d-flex gap-2">
+        <a class="btn btn-outline-primary btn-sm"
+           asp-controller="Cv" asp-action="UserCvs"
+           asp-route-userId="@(Model.IsOwnProfile ? null : Model.ProfileUserId)">@L["Shared_CVs"]</a>
+        @if (!Model.IsOwnProfile && User.IsInRole(RoleNames.Administrator))
+        {
+            <a class="btn btn-outline-secondary btn-sm" asp-controller="Admin" asp-action="Index"><i class="bi bi-arrow-left"></i></a>
+        }
+        @if (Model.IsOwnProfile)
+        {
+            <a class="btn btn-outline-secondary btn-sm" asp-controller="Account" asp-action="Settings"><i class="bi bi-gear"></i></a>
+        }
+    </div>
+</div>
+
+<div id="autoSaveConflict" class="alert alert-warning d-none mb-3">
+    @L["Shared_Conflict"]
+    <button type="button" class="btn btn-sm btn-warning ms-2" onclick="location.reload()"><i class="bi bi-arrow-clockwise"></i></button>
+</div>
+<div id="autoSaveAlert" class="mb-3"></div>
+
+<nav class="mb-3 d-flex flex-wrap gap-3 small">
+    <a href="#me">@L["Profile_Index_Section_Me"]</a>
+    <a href="#info">@L["Profile_Index_Section_Info"]</a>
+    <a href="#projects">@L["Shared_Projects"]</a>
+</nav>
+
+<form id="profileForm" asp-action="Save" method="post">
+    <input type="hidden" asp-for="ProfileUserId"/>
+    <input type="hidden" asp-for="RowVersion"/>
+    <div id="removedInfoValueIds"></div>
+    <div id="removedProjectIds"></div>
+
+    <section id="me" class="mb-4">
+        <h2 class="h5 mb-3">@L["Profile_Index_Section_Me"]</h2>
+        @foreach (var category in meFieldsByCategory.Keys)
+        {
+            var fieldsInCategory = meFieldsByCategory[category];
+            <div class="mb-4">
+                <h3 class="h6 mb-2">@category.CategoryName</h3>
+                <div class="row g-3">
+                    @foreach (var field in fieldsInCategory)
+                    {
+                        var meFieldName = $"MeFieldsById[{field.AttributeDefinitionId}]";
+                        <div class="@(field.DataType == AttributeDataType.Image ? "col-12" : "col-md-6")">
+                            <partial name="_AttributeField" model="@(new AttributeFieldModel { Field = field, FieldName = meFieldName })"/>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </section>
+
+    <section id="info" class="mb-4">
+        <h2 class="h5 mb-3">@L["Profile_Index_Section_Info"]</h2>
+        @if (Model.AttributeCategories.Count > 0)
+        {
+            <partial name="_AttributeLibraryPicker" model="@(new AttributeLibraryPickerModel
+                                                           {
+                                                               Categories = Model.AttributeCategories,
+                                                               SuggestUrl = Url.Action("Suggest", "Attributes")!,
+                                                               RowUrl = Url.Action("InfoFieldRow", "Profile")!,
+                                                               Placeholder = L["Shared_PickerPrefix"],
+                                                               AllCategoriesLabel = L["Shared_AllCategories"],
+                                                               ExcludeBuiltIn = true
+                                                           })"/>
+        }
+
+        @foreach (var category in Model.AttributeCategories)
+        {
+            var fieldsInCategory = infoFieldsByCategory.TryGetValue(category.Id, out var f)
+                ? f
+                : new List<ProfileAttributeFieldDto>();
+
+            <div class="mb-4" data-category="@category.Id">
+                <h3 class="h6 mb-2">@category.Name</h3>
+                <div data-attr-list>
+                    @foreach (var field in fieldsInCategory)
+                    {
+                        <partial name="_ProfileInfoFieldRow" model="field"/>
+                    }
+                </div>
+            </div>
+        }
+    </section>
+
+    <section id="projects" class="mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h2 class="h5 mb-0">@L["Shared_Projects"]</h2>
+            <button type="button" class="btn btn-primary btn-sm" id="projectAddBtn"><i class="bi bi-plus-lg"></i></button>
+        </div>
+
+        <div id="projectsList">
+            @for (var i = 0; i < Model.Projects.Count; i++)
+            {
+                <partial name="_ProjectCard" model="(Model.Projects[i], i)"/>
+            }
+        </div>
+
+        <template id="projectCardTemplate">
+            <partial name="_ProjectCard" model="(new ProjectDto(), 0)"/>
+        </template>
+    </section>
+
+    <div class="mt-3 d-flex align-items-center gap-2">
+        <button type="submit" class="btn btn-primary btn-sm">@L["Profile_Index_SaveProfile"]</button>
+        <span id="autoSaveStatus"
+              class="badge text-bg-secondary"
+              data-text-unsaved="@L["Profile_Index_Unsaved"]"
+              data-text-saving="@L["Profile_Index_Saving"]"
+              data-text-saved="@L["Profile_Index_Saved"]"
+              data-text-conflict="@L["Shared_Conflict"]"
+              data-text-error="@L["Shared_Error"]"
+              data-text-save-failed="@L["Profile_Index_SaveFailed"]"
+              data-text-save-failed-unavailable="@L["Profile_Index_SaveFailedUnavailable"]">@L["Profile_Index_Saved"]</span>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_TagifyScripts"/>
+    <script src="~/js/picker-utils.js" asp-append-version="true"></script>
+    <script src="~/js/profile.js" asp-append-version="true"></script>
+    <partial name="_ImageUploadScripts"/>
+}

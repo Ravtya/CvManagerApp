@@ -1,0 +1,36 @@
+@model AccountSettingsViewModel
+@{
+    ViewData["Title"] = L["Account_Settings_Title"];
+}
+
+<h1>@L["Account_Settings_Title"]</h1>
+
+<p>@L["Shared_Email"]: @Model.Email</p>
+
+<h2>@(Model.ChangePassword.HasPassword ? L["Account_Settings_ChangePassword"] : L["Account_Settings_SetPassword"])</h2>
+
+<form asp-action="ChangePassword" method="post">
+    @if (Model.ChangePassword.HasPassword)
+    {
+        <div class="mb-3">
+            <label asp-for="ChangePassword.CurrentPassword" class="form-label"></label>
+            <input asp-for="ChangePassword.CurrentPassword" class="form-control"/>
+            <span asp-validation-for="ChangePassword.CurrentPassword" class="text-danger"></span>
+        </div>
+    }
+    <div class="mb-3">
+        <label asp-for="ChangePassword.NewPassword" class="form-label"></label>
+        <input asp-for="ChangePassword.NewPassword" class="form-control"/>
+        <span asp-validation-for="ChangePassword.NewPassword" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="ChangePassword.ConfirmPassword" class="form-label"></label>
+        <input asp-for="ChangePassword.ConfirmPassword" class="form-control"/>
+        <span asp-validation-for="ChangePassword.ConfirmPassword" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">@L["Shared_Save"]</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+}

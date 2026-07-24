@@ -1,0 +1,63 @@
+@model PagerModel
+@{
+    if (Model.TotalPages <= 1)
+        return;
+
+    var extras = ViewData["PagerRoute"] as IDictionary<string, string?>
+                 ?? new Dictionary<string, string?>();
+    var action = ViewContext.RouteData.Values["action"]?.ToString();
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+
+    string UrlFor(int page)
+    {
+        var values = new RouteValueDictionary(extras)
+        {
+            ["page"] = page
+        };
+        return Url.Action(action, controller, values) ?? "#";
+    }
+
+    var start = Math.Max(1, Model.Page - 2);
+    var end = Math.Min(Model.TotalPages, Model.Page + 2);
+}
+
+<nav class="d-flex flex-wrap align-items-center justify-content-between gap-2 mt-3">
+    <div class="text-muted small">
+        @L["Shared_Pager_Summary", Model.Page, Model.TotalPages, Model.TotalCount]
+    </div>
+    <ul class="pagination pagination-sm mb-0">
+        <li class="page-item@(Model.HasPrevious ? "" : " disabled")">
+            @if (Model.HasPrevious)
+            {
+                <a class="page-link" href="@UrlFor(Model.Page - 1)">@L["Shared_Pager_Prev"]</a>
+            }
+            else
+            {
+                <span class="page-link">@L["Shared_Pager_Prev"]</span>
+            }
+        </li>
+        @for (var i = start; i <= end; i++)
+        {
+            <li class="page-item@(i == Model.Page ? " active" : "")">
+                @if (i == Model.Page)
+                {
+                    <span class="page-link">@i</span>
+                }
+                else
+                {
+                    <a class="page-link" href="@UrlFor(i)">@i</a>
+                }
+            </li>
+        }
+        <li class="page-item@(Model.HasNext ? "" : " disabled")">
+            @if (Model.HasNext)
+            {
+                <a class="page-link" href="@UrlFor(Model.Page + 1)">@L["Shared_Pager_Next"]</a>
+            }
+            else
+            {
+                <span class="page-link">@L["Shared_Pager_Next"]</span>
+            }
+        </li>
+    </ul>
+</nav>

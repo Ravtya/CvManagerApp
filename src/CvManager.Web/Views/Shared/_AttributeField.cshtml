@@ -1,0 +1,134 @@
+@model AttributeFieldModel
+@{
+    var field = Model.Field;
+    var name = Model.FieldName;
+    var isEdit = Model.IsEdit;
+}
+
+@if (isEdit)
+{
+    <input type="hidden" name="@(name).ValueId" value="@field.ValueId"/>
+    <input type="hidden" name="@(name).AttributeDefinitionId" value="@field.AttributeDefinitionId"/>
+}
+
+@if (Model.ShowLabel)
+{
+    <label class="form-label mb-1">@field.Name</label>
+}
+
+@switch (field.DataType)
+{
+    case AttributeDataType.String:
+        if (isEdit)
+        {
+            <input class="form-control form-control-sm" name="@(name).StringValue" value="@field.StringValue"/>
+        }
+        else
+        {
+            @field.StringValue
+        }
+        break;
+    case AttributeDataType.Text:
+        if (isEdit)
+        {
+            <textarea class="form-control form-control-sm" name="@(name).TextValue" rows="3">@field.TextValue</textarea>
+        }
+        else
+        {
+            @Html.Raw(Markdown.ToHtml(field.TextValue))
+        }
+        break;
+    case AttributeDataType.Image:
+        if (isEdit)
+        {
+            <div data-image-upload>
+                <input type="hidden" name="@(name).ImageUrl" value="@field.ImageUrl" data-image-url/>
+                <div class="d-flex flex-wrap gap-2 mb-2">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" data-image-upload-btn><i class="bi bi-upload"></i></button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" data-image-clear-btn><i class="bi bi-x-lg"></i></button>
+                </div>
+                <img data-image-preview alt="@field.Name"
+                     src="@(string.IsNullOrWhiteSpace(field.ImageUrl) ? null : field.ImageUrl)"
+                     class="img-thumbnail@(string.IsNullOrWhiteSpace(field.ImageUrl) ? " d-none" : null)"
+                     style="width:12rem;height:12rem;object-fit:contain"/>
+            </div>
+        }
+        else if (!string.IsNullOrWhiteSpace(field.ImageUrl))
+        {
+            <img src="@field.ImageUrl" alt="@field.Name" class="img-thumbnail"
+                 style="width:12rem;height:12rem;object-fit:contain"/>
+        }
+        break;
+    case AttributeDataType.Numeric:
+        if (isEdit)
+        {
+            <input class="form-control form-control-sm" type="number" step="any" name="@(name).NumericValue"
+                   value="@AttributeNumberFormat.Format(field.NumericValue)"/>
+        }
+        else
+        {
+            @AttributeNumberFormat.Format(field.NumericValue)
+        }
+        break;
+    case AttributeDataType.Date:
+        if (isEdit)
+        {
+            <input class="form-control form-control-sm" type="date" name="@(name).DateValue"
+                   value="@(field.DateValue?.ToString("yyyy-MM-dd"))"/>
+        }
+        else
+        {
+            @field.DateValue?.ToString("yyyy-MM-dd")
+        }
+        break;
+    case AttributeDataType.Period:
+        if (isEdit)
+        {
+            <div class="row g-2">
+                <div class="col-6">
+                    <input class="form-control form-control-sm" type="date" name="@(name).PeriodStart"
+                           value="@(field.PeriodStart?.ToString("yyyy-MM-dd"))"/>
+                </div>
+                <div class="col-6">
+                    <input class="form-control form-control-sm" type="date" name="@(name).PeriodEnd"
+                           value="@(field.PeriodEnd?.ToString("yyyy-MM-dd"))"/>
+                </div>
+            </div>
+        }
+        else
+        {
+            @($"{field.PeriodStart:yyyy-MM-dd} — {field.PeriodEnd:yyyy-MM-dd}")
+        }
+        break;
+    case AttributeDataType.Boolean:
+        if (isEdit)
+        {
+            <div class="form-check">
+                <input type="hidden" name="@(name).BooleanValue" value="false"/>
+                <input class="form-check-input" type="checkbox" name="@(name).BooleanValue" value="true"
+                       @(field.BooleanValue ? "checked" : null)/>
+                <label class="form-check-label">@L["Shared_Yes"]</label>
+            </div>
+        }
+        else
+        {
+            @(field.BooleanValue ? L["Shared_Yes"] : L["Shared_No"])
+        }
+        break;
+    case AttributeDataType.Dropdown:
+        if (isEdit)
+        {
+            <select class="form-select form-select-sm" name="@(name).DropdownOptionId">
+                <option value="">@L["Shared_Select"]</option>
+                @foreach (var option in field.DropdownOptions)
+                {
+                    <option value="@option.Id" selected="@(field.DropdownOptionId == option.Id ? "selected" : null)">@option.Value</option>
+                }
+            </select>
+        }
+        else
+        {
+            @(field.DropdownOptions.FirstOrDefault(o => o.Id == field.DropdownOptionId)?.Value)
+        }
+        break;
+}

@@ -1,0 +1,40 @@
+@model (ProjectDto Project, int Index)
+@{
+    var project = Model.Project;
+    var index = Model.Index;
+    var startDateValue = project.StartDate == default ? string.Empty : project.StartDate.ToString("yyyy-MM-dd");
+    var endDateValue = project.EndDate?.ToString("yyyy-MM-dd") ?? string.Empty;
+}
+
+<div class="project-card border rounded p-3 mb-2" data-project-id="@project.Id">
+    <input type="hidden" name="Projects[@index].Id" value="@project.Id"/>
+    <div class="d-flex gap-2 mb-2">
+        <div class="flex-grow-1">
+            <label class="form-label small">@L["Profile_ProjectCard_ProjectName"]</label>
+            <input name="Projects[@index].Name" class="form-control form-control-sm" value="@project.Name" required
+                   maxlength="200"/>
+        </div>
+        <button type="button" class="btn btn-outline-danger btn-sm align-self-end" data-remove>
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </div>
+    <div class="row g-2 mb-2">
+        <div class="col-6">
+            <input name="Projects[@index].StartDate" type="date" class="form-control form-control-sm"
+                   value="@startDateValue" required/>
+        </div>
+        <div class="col-6">
+            <input name="Projects[@index].EndDate" type="date" class="form-control form-control-sm"
+                   value="@endDateValue"/>
+        </div>
+    </div>
+    <label class="form-label small">@L["Profile_ProjectCard_ProjectDescription"]</label>
+    <textarea name="Projects[@index].Description" class="form-control form-control-sm mb-2"
+              rows="2">@project.Description</textarea>
+    <label class="form-label small">@L["Profile_ProjectCard_TagsString"]</label>
+    <input name="Projects[@index].TagsString"
+           class="form-control form-control-sm"
+           value="@project.TagsString"
+           data-tag-input
+           placeholder="@L["Shared_TagsPlaceholder"]"/>
+</div>

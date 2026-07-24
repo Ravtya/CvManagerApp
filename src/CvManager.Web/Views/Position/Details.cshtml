@@ -1,0 +1,178 @@
+@model PositionFormDto
+@{
+    ViewData["Title"] = Model.IsNew ? L["Position_Details_Title_Create"] : Model.Title;
+    var canEdit = User.CanManageRecruiting();
+    var showDiscussion = Model is { IsNew: false, Id: not null };
+    var accessModes = Enum.GetValues<PositionAccessMode>()
+        .Select(m => new SelectListItem(UiMessages.AccessMode(m), m.ToString()))
+        .ToList();
+    var selectedByCategory = Model.AttributesById.Values
+        .GroupBy(a => a.CategoryId)
+        .ToDictionary(g => g.Key, g => g.OrderBy(a => a.Name).ToList());
+    var projectTags = (Model.TagsString ?? string.Empty)
+        .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h4 mb-0">@(Model.IsNew ? L["Position_Details_Title_Create"] : Model.Title)</h1>
+    <div class="d-flex flex-wrap gap-2">
+        @if (!Model.IsNew && canEdit)
+        {
+            <form method="post" asp-action="Duplicate" class="d-inline">
+                <input type="hidden" name="id" value="@Model.Id"/>
+                <button type="submit" class="btn btn-outline-secondary">@L["Position_Details_Duplicate"]</button>
+            </form>
+            <a class="btn btn-outline-secondary" asp-controller="Cv" asp-action="PositionCvs"
+               asp-route-positionId="@Model.Id">@L["Shared_CVs"]</a>
+        }
+        @if (!Model.IsNew && Model.MyCvId is int myCvId)
+        {
+            <a class="btn btn-primary" asp-controller="Cv" asp-action="Details"
+               asp-route-id="@myCvId">@L["Position_Details_OpenMyCv"]</a>
+        }
+        else if (!Model.IsNew && Model.CanFillCv)
+        {
+            <a class="btn btn-primary" asp-controller="Cv" asp-action="Create"
+               asp-route-positionId="@Model.Id">@L["Position_Details_CreateCv"]</a>
+        }
+        <a class="btn btn-outline-secondary" asp-action="Index"><i class="bi bi-arrow-left"></i></a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="@(showDiscussion ? "col-lg-8" : "col-12")">
+        @if (canEdit)
+        {
+            <form method="post" asp-action="Save">
+                <input type="hidden" asp-for="Id"/>
+                <input type="hidden" asp-for="RowVersion"/>
+
+                <div class="mb-3">
+                    <label asp-for="Title" class="form-label">@L["Shared_Title"]</label>
+                    <input asp-for="Title" class="form-control"/>
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="ShortDescription" class="form-label">@L["Position_Details_Field_ShortDescription"]</label>
+                    <textarea asp-for="ShortDescription" class="form-control" rows="2"></textarea>
+                    <span asp-validation-for="ShortDescription" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="AccessMode" class="form-label">@L["Shared_Access"]</label>
+                    <select asp-for="AccessMode" class="form-select" asp-items="accessModes"></select>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="MaxProjectsInCv" class="form-label">@L["Position_Details_Field_MaxProjects"]</label>
+                    <input asp-for="MaxProjectsInCv" type="number" min="0" class="form-control"/>
+                    <span asp-validation-for="MaxProjectsInCv" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="TagsString" class="form-label">@L["Position_Details_Field_TagsString"]</label>
+                    <input asp-for="TagsString"
+                           class="form-control"
+                           data-tag-input
+                           placeholder="@L["Shared_TagsPlaceholder"]"/>
+                    <span asp-validation-for="TagsString" class="text-danger"></span>
+                </div>
+
+                <h2 class="h6 mb-2">@L["Shared_Attributes"]</h2>
+                @if (Model.AttributeCategories.Count == 0)
+                {
+                    <div class="alert alert-warning">@L["Position_Details_NoAttributes"]</div>
+                }
+                else
+                {
+                    <partial name="_AttributeLibraryPicker" model="@(new AttributeLibraryPickerModel
+                                                                   {
+                                                                       Categories = Model.AttributeCategories,
+                                                                       SuggestUrl = Url.Action("Suggest", "Attributes")!,
+                                                                       RowUrl = Url.Action("AttributeRow", "Position")!,
+                                                                       Placeholder = L["Shared_PickerPrefix"],
+                                                                       AllCategoriesLabel = L["Shared_AllCategories"]
+                                                                   })"/>
+
+                    @foreach (var category in Model.AttributeCategories)
+                    {
+                        var selectedInCategory = selectedByCategory.TryGetValue(category.Id, out var items) ? items : [];
+                        <div class="mb-4" data-category="@category.Id">
+                            <h2 class="h6 mb-2">@category.Name</h2>
+                            <div data-attr-list>
+                                @foreach (var item in selectedInCategory)
+                                {
+                                    <partial name="_PositionAttributeCard" model="item"/>
+                                }
+                            </div>
+                        </div>
+                    }
+                }
+
+                <button type="submit" class="btn btn-primary">@L["Shared_Save"]</button>
+            </form>
+
+            @if (!Model.IsNew)
+            {
+                <form method="post" asp-action="Delete" class="mt-3">
+                    <input type="hidden" name="selectedIds" value="@Model.Id"/>
+                    <button type="submit" class="btn btn-outline-secondary"><i class="bi bi-trash"></i></button>
+                </form>
+            }
+        }
+        else
+        {
+            @if (!string.IsNullOrWhiteSpace(Model.ShortDescription))
+            {
+                <p class="mb-3">@Model.ShortDescription</p>
+            }
+
+            @if (projectTags.Length > 0)
+            {
+                <h2 class="h6 mb-2">@L["Shared_Tags"]</h2>
+                <ul class="list-unstyled mb-3">
+                    @foreach (var tag in projectTags.OrderBy(t => t, StringComparer.OrdinalIgnoreCase))
+                    {
+                        <li>@tag</li>
+                    }
+                </ul>
+            }
+
+            @if (Model.AttributesById.Count > 0)
+            {
+                <h2 class="h6 mb-2">@L["Shared_Attributes"]</h2>
+                <ul class="list-unstyled mb-0">
+                    @foreach (var item in Model.AttributesById.Values.OrderBy(a => a.CategoryName).ThenBy(a => a.Name))
+                    {
+                        <li>@item.Name</li>
+                    }
+                </ul>
+            }
+        }
+    </div>
+
+    @if (showDiscussion)
+    {
+        <div class="col-lg-4">
+            @{ ViewBag.PositionId = Model.Id; }
+            <partial name="_Discussion"/>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @if (canEdit)
+    {
+        <partial name="_ValidationScriptsPartial"/>
+        <partial name="_TagifyScripts"/>
+        <script src="~/js/picker-utils.js" asp-append-version="true"></script>
+        <script src="~/js/position-attributes-picker.js" asp-append-version="true"></script>
+    }
+    @if (showDiscussion)
+    {
+        <script src="https://cdn.jsdelivr.net/npm/@@microsoft/signalr@8.0.7/dist/browser/signalr.min.js"
+                crossorigin="anonymous"></script>
+        <script src="~/js/discussion.js" asp-append-version="true"></script>
+    }
+}

@@ -1,0 +1,68 @@
+@using System.Security.Claims
+@{
+    var positionId = (int)ViewBag.PositionId;
+    var posts = ViewBag.DiscussionPosts as IReadOnlyList<DiscussionPostDto> ?? [];
+    var linkAuthors = User.CanManageRecruiting();
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var profileUrl = linkAuthors ? Url.Action("UserCvs", "Cv", new { userId = "__id__" }) : null;
+}
+
+<div id="discussionPanel"
+     class="small"
+     data-position-id="@positionId"
+     data-profile-url="@profileUrl"
+     data-current-user-id="@userId"
+     data-is-admin="@(User.IsAdmin() ? "true" : null)">
+    <div class="fw-semibold mb-2">@L["Position_Discussion_Header"]</div>
+
+    <div data-discussion-error class="text-danger small mb-2 d-none" role="alert"></div>
+
+    <div data-discussion-list class="overflow-auto mb-2" style="max-height: min(70vh, 24rem)">
+        @foreach (var post in posts)
+        {
+            var canManage = userId is not null && (User.IsAdmin() || userId == post.AuthorUserId);
+            <div class="mb-3" data-post-id="@post.Id">
+                <div class="text-muted mb-1">
+                    @if (linkAuthors)
+                    {
+                        <a asp-controller="Cv" asp-action="UserCvs"
+                           asp-route-userId="@post.AuthorUserId">@post.AuthorName</a>
+                    }
+                    else
+                    {
+                        @post.AuthorName
+                    }
+                    · <time data-local-time datetime="@post.CreatedAt.UtcDateTime.ToString("o")">@post.CreatedAt.UtcDateTime.ToString("g") UTC</time>
+                </div>
+                <div data-discussion-body>@Html.Raw(Markdown.ToHtml(post.Content))</div>
+                @if (canManage)
+                {
+                    <partial name="_DiscussionManage" model="(positionId, post.Id, post.Content)"/>
+                }
+            </div>
+        }
+    </div>
+
+    <p data-discussion-empty class="text-muted@(posts.Count > 0 ? " d-none" : null)">@L["Position_Discussion_Empty"]</p>
+
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <form method="post" asp-action="AddDiscussionPost" data-discussion-form="add">
+            <input type="hidden" name="positionId" value="@positionId"/>
+            <div class="input-group input-group-sm">
+                <textarea name="content" class="form-control" rows="2" maxlength="4000"
+                          placeholder="@L["Position_Discussion_Placeholder"]" required></textarea>
+                <button type="submit" class="btn btn-primary align-self-stretch">@L["Position_Discussion_Send"]</button>
+            </div>
+        </form>
+    }
+    else
+    {
+        <a asp-controller="Account" asp-action="Login"
+           asp-route-returnUrl="@($"{Context.Request.Path}{Context.Request.QueryString}")">@L["Position_Discussion_SignInToPost"]</a>
+    }
+
+    <template id="discussionManageTpl">
+        <partial name="_DiscussionManage" model="@((positionId, 0, string.Empty))"/>
+    </template>
+</div>

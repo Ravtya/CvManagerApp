@@ -1,0 +1,68 @@
+@model PagedResult<PositionListItemDto>
+@{
+    ViewData["Title"] = L["Shared_Positions"];
+    var canManage = User.CanManageRecruiting();
+    var search = ViewBag.Search as string;
+    ViewData["PagerRoute"] = new Dictionary<string, string?> { ["search"] = search };
+}
+
+<h1 class="h4 mb-3 text-center">@L["Shared_Positions"]</h1>
+
+<partial name="_ListSearch" model="search"/>
+
+<form method="post" asp-action="Delete">
+    @if (canManage)
+    {
+        <div class="mb-3 d-flex gap-2">
+            <a class="btn btn-outline-secondary" asp-action="Create"><i class="bi bi-plus-lg"></i></a>
+            <button type="submit" class="btn btn-outline-secondary"><i class="bi bi-trash"></i></button>
+        </div>
+    }
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            @if (canManage)
+            {
+                <th class="text-center">
+                    <input type="checkbox" class="form-check-input" data-select-all=".row-select"/>
+                </th>
+            }
+            <th>@L["Shared_Title"]</th>
+            <th>@L["Shared_Description"]</th>
+            <th>@L["Shared_Access"]</th>
+            <th class="text-end">@L["Shared_CVs"]</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                @if (canManage)
+                {
+                    <td class="text-center">
+                        <input type="checkbox" class="form-check-input row-select" name="selectedIds" value="@item.Id"/>
+                    </td>
+                }
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">@item.Title</a>
+                </td>
+                <td class="text-muted">@item.ShortDescription</td>
+                <td>@UiMessages.AccessMode(item.AccessMode)</td>
+                <td class="text-end">
+                    @if (canManage)
+                    {
+                        <a asp-controller="Cv" asp-action="PositionCvs" asp-route-positionId="@item.Id">@item.CvCount</a>
+                    }
+                    else
+                    {
+                        @item.CvCount
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</form>
+
+<partial name="_Pager" model="@(new PagerModel { Page = Model.Page, TotalCount = Model.TotalCount })"/>

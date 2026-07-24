@@ -1,0 +1,9 @@
+namespace CvManager.Domain.Entities;
+
+public class AttributeCategory
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = string.Empty;
+
+    public ICollection<AttributeDefinition> Attributes { get; set; } = [];
+}

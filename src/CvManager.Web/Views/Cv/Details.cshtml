@@ -1,0 +1,121 @@
+@model CvDetailsDto
+@{
+    ViewData["Title"] = Model.PositionTitle;
+    var needsImageUpload = Model.CanEdit && Model.Attributes.Any(a => a.DataType == AttributeDataType.Image);
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h1 class="h4 mb-0">@Model.PositionTitle</h1>
+        <div class="text-muted small">@Model.CandidateEmail</div>
+    </div>
+    <div class="d-flex gap-2 align-items-center">
+        @if (Model.CanLike)
+        {
+            <form method="post" asp-action="ToggleLike" class="d-inline" data-cv-like>
+                <input type="hidden" name="id" value="@Model.Id"/>
+                <button type="submit" class="btn btn-sm @(Model.LikedByMe ? "btn-primary" : "btn-outline-primary")">
+                    <i class="bi @(Model.LikedByMe ? "bi-heart-fill" : "bi-heart")"></i>
+                </button>
+            </form>
+        }
+        @if (Model.Exists)
+        {
+            <span class="text-muted small">
+                <i class="bi bi-heart-fill"></i>
+                <span data-cv-likes>@Model.LikeCount</span>
+            </span>
+        }
+        <a class="btn btn-outline-secondary btn-sm" asp-action="UserCvs" asp-route-userId="@Model.ProfileUserId">@L["Shared_CVs"]</a>
+        <a class="btn btn-outline-secondary btn-sm" asp-controller="Position" asp-action="Details" asp-route-id="@Model.PositionId">@L["Shared_Position"]</a>
+    </div>
+</div>
+
+@if (Model.CanEdit)
+{
+    <form method="post" asp-action="Save">
+        <input type="hidden" name="PositionId" value="@Model.PositionId"/>
+        <input type="hidden" name="ProfileUserId" value="@Model.ProfileUserId"/>
+        <input type="hidden" name="ProfileRowVersion" value="@Model.ProfileRowVersion"/>
+
+        <h2 class="h6 mb-2">@L["Shared_Attributes"]</h2>
+        <p class="text-muted small mb-3">@L["Cv_Details_Attributes_MasterHint"]</p>
+        <div class="row g-3 mb-3">
+            @for (var i = 0; i < Model.Attributes.Count; i++)
+            {
+                var field = Model.Attributes[i];
+                <div class="@(field.DataType == AttributeDataType.Image ? "col-12" : "col-md-6")">
+                    <div data-cv-attr class="border rounded p-2 h-100@(field.ValueId == 0 ? " border-danger" : null)">
+                        <partial name="_AttributeField" model="@(new AttributeFieldModel { Field = field, FieldName = $"Attributes[{i}]" })"/>
+                    </div>
+                </div>
+            }
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm">@L["Shared_Save"]</button>
+    </form>
+
+    @if (Model.Exists)
+    {
+        <form method="post" asp-action="Delete" class="mt-3">
+            <input type="hidden" name="selectedIds" value="@Model.Id"/>
+            <input type="hidden" name="profileUserId" value="@Model.ProfileUserId"/>
+            <button type="submit" class="btn btn-outline-secondary"><i class="bi bi-trash"></i></button>
+        </form>
+    }
+}
+else
+{
+    <h2 class="h6 mb-2">@L["Shared_Attributes"]</h2>
+    <dl class="row mb-4">
+        @foreach (var field in Model.Attributes)
+        {
+            <dt class="col-sm-3">@field.Name</dt>
+            <dd class="col-sm-9">
+                @if (field.ValueId == 0)
+                {
+                    <span class="text-muted">—</span>
+                }
+                else
+                {
+                    <partial name="_AttributeField" model="@(new AttributeFieldModel { Field = field, ShowLabel = false })"/>
+                }
+            </dd>
+        }
+    </dl>
+}
+
+<h2 class="h6 mb-2">@L["Shared_Projects"]</h2>
+@if (Model.Projects.Count == 0)
+{
+    <p class="text-muted small">@L["Cv_Details_NoProjects"]</p>
+}
+else
+{
+    @foreach (var project in Model.Projects)
+    {
+        <div class="mb-3">
+            <div class="d-flex justify-content-between">
+                <strong>@project.Name</strong>
+                <span class="text-muted small">
+                    @project.StartDate.ToString("yyyy-MM") — @(project.EndDate?.ToString("yyyy-MM") ?? "…")
+                </span>
+            </div>
+            @if (!string.IsNullOrWhiteSpace(project.TagsString))
+            {
+                <div class="text-muted small">@project.TagsString</div>
+            }
+            <div>@Html.Raw(Markdown.ToHtml(project.Description))</div>
+        </div>
+    }
+}
+
+@section Scripts {
+    @if (Model.CanLike || Model.CanEdit)
+    {
+        <script src="~/js/cv-details.js" asp-append-version="true"></script>
+    }
+    @if (needsImageUpload)
+    {
+        <partial name="_ImageUploadScripts"/>
+    }
+}

@@ -1,0 +1,19 @@
+@model (int PositionId, int PostId, string Content)
+
+<div class="mt-1 d-flex gap-2 align-items-start">
+    <details>
+        <summary class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></summary>
+        <form method="post" asp-action="EditDiscussionPost" class="mt-1" data-discussion-form="edit">
+            <input type="hidden" name="positionId" value="@Model.PositionId"/>
+            <input type="hidden" name="postId" value="@Model.PostId"/>
+            <textarea name="content" class="form-control form-control-sm mb-1" rows="2"
+                      maxlength="4000" required>@Model.Content</textarea>
+            <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-check-lg"></i></button>
+        </form>
+    </details>
+    <form method="post" asp-action="DeleteDiscussionPost" data-discussion-form="delete">
+        <input type="hidden" name="positionId" value="@Model.PositionId"/>
+        <input type="hidden" name="postId" value="@Model.PostId"/>
+        <button type="submit" class="btn btn-sm btn-link text-danger p-0"><i class="bi bi-trash"></i></button>
+    </form>
+</div>

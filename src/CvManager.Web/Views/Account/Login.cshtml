@@ -1,0 +1,50 @@
+@model LoginViewModel
+
+@{
+    ViewData["Title"] = L["Account_Login_Title"];
+    var returnUrl = ViewData["ReturnUrl"] as string;
+    var resendEmail = TempData["ResendEmail"] as string;
+}
+
+<div class="col-md-5 mx-auto">
+    <h1 class="text-center">@L["Account_Login_Title"]</h1>
+
+    @if (!string.IsNullOrEmpty(resendEmail))
+    {
+        <form asp-action="ResendConfirmation" method="post">
+            <input type="hidden" name="email" value="@resendEmail"/>
+            <button type="submit" class="btn btn-link">@L["Account_Login_ResendConfirmationLink"]</button>
+        </form>
+    }
+
+    <form asp-action="Login" method="post">
+        <input type="hidden" name="returnUrl" value="@returnUrl"/>
+
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label"></label>
+            <input asp-for="Email" class="form-control"/>
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Password" class="form-label"></label>
+            <input asp-for="Password" class="form-control"/>
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <div class="mb-3 form-check">
+            <input asp-for="RememberMe" class="form-check-input"/>
+            <label asp-for="RememberMe" class="form-check-label"></label>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">@L["Shared_SignIn"]</button>
+    </form>
+
+    <div class="d-grid gap-2 my-3">
+        <a asp-action="ExternalLogin" asp-route-provider="Google" asp-route-returnUrl="@returnUrl"
+           class="btn btn-outline-secondary">Google</a>
+        <a asp-action="ExternalLogin" asp-route-provider="Facebook" asp-route-returnUrl="@returnUrl"
+           class="btn btn-outline-secondary">Facebook</a>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+}

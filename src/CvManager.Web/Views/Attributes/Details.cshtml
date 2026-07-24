@@ -1,0 +1,111 @@
+@model AttributeFormDto
+@{
+    ViewData["Title"] = Model.IsNew ? L["Attributes_Details_Title_Create"] : Model.Name;
+    var showOptions = Model.IsNew || Model.DataType == AttributeDataType.Dropdown;
+    if (showOptions && Model.Options.Count == 0)
+        Model.Options.Add(new AttributeOptionDto());
+    var dataTypes = Enum.GetValues<AttributeDataType>()
+        .Select(t => new SelectListItem(UiMessages.DataType(t), ((int)t).ToString()))
+        .ToList();
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h4 mb-0">
+        @(Model.IsNew ? L["Attributes_Details_Title_Create"] : Model.Name)
+        @if (Model.IsBuiltIn)
+        {
+            <span class="badge text-bg-secondary">@L["Attributes_Details_BuiltIn"]</span>
+        }
+    </h1>
+    <a class="btn btn-outline-secondary" asp-action="Index"><i class="bi bi-arrow-left"></i></a>
+</div>
+
+<form method="post" asp-action="Save">
+    @if (!Model.IsNew)
+    {
+        <input type="hidden" asp-for="Id"/>
+        <input type="hidden" asp-for="RowVersion"/>
+        <input type="hidden" asp-for="DataType"/>
+        <input type="hidden" asp-for="IsBuiltIn"/>
+    }
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">@L["Shared_Name"]</label>
+        <input asp-for="Name" class="form-control"/>
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label">@L["Shared_Description"]</label>
+        <textarea asp-for="Description" class="form-control" rows="2"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="CategoryId" class="form-label">@L["Shared_Category"]</label>
+        <select asp-for="CategoryId" class="form-select"
+                asp-items="@(new SelectList(Model.CategoryOptions, nameof(AttributeCategoryDto.Id), nameof(AttributeCategoryDto.Name)))">
+        </select>
+        <span asp-validation-for="CategoryId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="DataType" class="form-label">@L["Attributes_Details_Field_DataType"]</label>
+        @if (Model.IsNew)
+        {
+            <select asp-for="DataType" class="form-select"
+                    asp-items="dataTypes"></select>
+        }
+        else
+        {
+            <input type="text" class="form-control" value="@UiMessages.DataType(Model.DataType)" readonly/>
+        }
+    </div>
+
+    @if (showOptions)
+    {
+        <div class="mb-3@(Model.IsNew ? " d-none" : "")" data-options-block>
+            <label class="form-label">@L["Attributes_Details_OptionsTitle"]</label>
+            <div class="mb-2" data-options data-type="@((int)AttributeDataType.Dropdown)">
+                @for (var i = 0; i < Model.Options.Count; i++)
+                {
+                    var option = Model.Options[i];
+                    <div class="input-group flex-wrap mb-1" data-option>
+                        <input type="hidden" name="Options[@i].Id" value="@option.Id"/>
+                        <input type="text" name="Options[@i].Value" value="@option.Value" class="form-control"/>
+                        <button type="button" class="btn btn-outline-secondary" data-remove><i class="bi bi-trash"></i></button>
+                        <span asp-validation-for="@Model.Options[i].Value" class="text-danger w-100"></span>
+                    </div>
+                }
+            </div>
+            <button type="button" class="btn btn-outline-secondary" data-add-option><i class="bi bi-plus-lg"></i></button>
+            <span asp-validation-for="Options" class="text-danger"></span>
+        </div>
+    }
+
+    @if (Model.IsNew)
+    {
+        <div class="form-check mb-3">
+            <input asp-for="IsBuiltIn" class="form-check-input"/>
+            <label asp-for="IsBuiltIn" class="form-check-label">@L["Attributes_Details_Field_IsBuiltIn"]</label>
+        </div>
+    }
+
+    <button type="submit" class="btn btn-primary">@(Model.IsNew ? L["Attributes_Details_Create"] : L["Shared_Save"])</button>
+</form>
+
+@if (Model is { IsNew: false, IsBuiltIn: false })
+{
+    <form method="post" asp-action="Delete" class="mt-3">
+        <input type="hidden" name="selectedIds" value="@Model.Id"/>
+        <button type="submit" class="btn btn-outline-secondary"><i class="bi bi-trash"></i></button>
+    </form>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+    @if (showOptions)
+    {
+        <script src="~/js/dropdown-options-editor.js" asp-append-version="true"></script>
+    }
+}

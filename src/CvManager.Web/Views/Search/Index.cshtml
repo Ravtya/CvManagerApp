@@ -1,0 +1,112 @@
+@using CvManager.Application.Dtos.Search
+@model SearchPageDto
+@{
+    ViewData["Title"] = L["Search_Index_Header"];
+    var hasResults = Model.Positions.Count > 0 || Model.Cvs.Count > 0 || Model.Discussions.Count > 0;
+}
+
+<h1 class="h4 mb-3">@L["Search_Index_Header"]</h1>
+
+<form method="get" asp-action="Index" class="mb-4">
+    <div class="input-group">
+        <input type="search" name="query" value="@Model.Query" class="form-control" placeholder="@L["Shared_Search"]" autofocus/>
+        <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
+    </div>
+</form>
+
+@if (string.IsNullOrWhiteSpace(Model.Query))
+{
+    <p class="text-muted">@L["Search_Index_Hint"]</p>
+}
+else if (!hasResults)
+{
+    <p class="text-muted">@L["Search_Index_Empty", Model.Query]</p>
+}
+else
+{
+    <section class="mb-4">
+        <h2 class="h5">@L["Shared_Positions"] <span class="text-muted fs-6">(@Model.Positions.Count)</span></h2>
+        <table class="table table-sm table-bordered align-middle">
+            <thead>
+            <tr><th>@L["Shared_Title"]</th><th>@L["Shared_Description"]</th></tr>
+            </thead>
+            <tbody>
+            @if (Model.Positions.Count == 0)
+            {
+                <tr>
+                    <td colspan="2" class="text-muted text-center py-4">@L["Search_Index_Positions_Empty"]</td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var hit in Model.Positions)
+                {
+                    <tr>
+                        <td><a asp-controller="Position" asp-action="Details" asp-route-id="@hit.Id">@hit.Title</a></td>
+                        <td class="text-muted small">@(hit.Subtitle ?? "—")</td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </section>
+
+    @if (Model.CanSeeCvs)
+    {
+        <section class="mb-4">
+            <h2 class="h5">@L["Shared_CVs"] <span class="text-muted fs-6">(@Model.Cvs.Count)</span></h2>
+            <table class="table table-sm table-bordered align-middle">
+                <thead>
+                <tr><th>@L["Search_Index_Col_Cv"]</th><th>@L["Shared_Likes"]</th></tr>
+                </thead>
+                <tbody>
+                @if (Model.Cvs.Count == 0)
+                {
+                    <tr>
+                        <td colspan="2" class="text-muted text-center py-4">@L["Search_Index_Cvs_Empty"]</td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var hit in Model.Cvs)
+                    {
+                        <tr>
+                            <td><a asp-controller="Cv" asp-action="Details" asp-route-id="@hit.Id">@hit.Title</a></td>
+                            <td>@(hit.LikeCount ?? 0)</td>
+                        </tr>
+                    }
+                }
+                </tbody>
+            </table>
+        </section>
+    }
+
+    <section class="mb-4">
+        <h2 class="h5">@L["Search_Index_Discussions_Header"] <span class="text-muted fs-6">(@Model.Discussions.Count)</span></h2>
+        <table class="table table-sm table-bordered align-middle">
+            <thead>
+            <tr><th>@L["Shared_Position"]</th><th>@L["Search_Index_Col_Snippet"]</th></tr>
+            </thead>
+            <tbody>
+            @if (Model.Discussions.Count == 0)
+            {
+                <tr>
+                    <td colspan="2" class="text-muted text-center py-4">@L["Search_Index_Discussions_Empty"]</td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var hit in Model.Discussions)
+                {
+                    <tr>
+                        <td>
+                            <a asp-controller="Position" asp-action="Details" asp-route-id="@hit.PositionId">@hit.Title</a>
+                        </td>
+                        <td class="text-muted small">@(hit.Subtitle ?? "—")</td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </section>
+}

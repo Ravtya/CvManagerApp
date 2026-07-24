@@ -1,0 +1,15 @@
+@model ProfileAttributeFieldDto
+@{
+    var fieldName = $"InfoFieldsById[{Model.AttributeDefinitionId}]";
+}
+
+<div class="border rounded p-3 mb-2" data-attr-row
+     data-attr-def-id="@Model.AttributeDefinitionId"
+     data-value-id="@Model.ValueId">
+    <div class="d-flex gap-2">
+        <div class="flex-grow-1">
+            <partial name="_AttributeField" model="@(new AttributeFieldModel { Field = Model, FieldName = fieldName })"/>
+        </div>
+        <button type="button" class="btn btn-outline-danger btn-sm" data-remove><i class="bi bi-x-lg"></i></button>
+    </div>
+</div>

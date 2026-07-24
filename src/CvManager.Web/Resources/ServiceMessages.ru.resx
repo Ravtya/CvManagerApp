@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="AccessMode_Public" xml:space="preserve"><value>Открытый</value></data>
+  <data name="AccessMode_Restricted" xml:space="preserve"><value>Ограниченный</value></data>
+  <data name="Admin.InvalidRole" xml:space="preserve"><value>Некорректная роль.</value></data>
+  <data name="Admin.OperationFailed" xml:space="preserve"><value>Операция не выполнена.</value></data>
+  <data name="Attributes.Delete.BuiltInNotAllowed" xml:space="preserve"><value>Встроенные атрибуты нельзя удалять.</value></data>
+  <data name="Attributes.Delete.InUseByPosition" xml:space="preserve"><value>Атрибут используется в шаблоне позиции и не может быть удалён.</value></data>
+  <data name="Attributes.DropdownAtLeastOneOption" xml:space="preserve"><value>Для выпадающего списка нужен хотя бы один вариант.</value></data>
+  <data name="Auth.AccountLockedOut" xml:space="preserve"><value>Аккаунт заблокирован. Попробуйте позже.</value></data>
+  <data name="Auth.EmailNotConfirmed" xml:space="preserve"><value>Подтвердите email перед входом.</value></data>
+  <data name="Auth.ExternalAccountCreateFailed" xml:space="preserve"><value>Не удалось создать аккаунт для этого email.</value></data>
+  <data name="Auth.ExternalAccountLinkFailed" xml:space="preserve"><value>Не удалось привязать внешний аккаунт к профилю.</value></data>
+  <data name="Auth.ExternalEmailMissing" xml:space="preserve"><value>Не удалось получить email от внешнего провайдера.</value></data>
+  <data name="Auth.ExternalSignInFailed" xml:space="preserve"><value>Вход через внешнего провайдера не удался. Попробуйте ещё раз.</value></data>
+  <data name="Auth.IncorrectEmailOrPassword" xml:space="preserve"><value>Неверный email или пароль.</value></data>
+  <data name="Auth.InvalidConfirmationLink" xml:space="preserve"><value>Недействительная или устаревшая ссылка подтверждения.</value></data>
+  <data name="Batch.MoreErrors" xml:space="preserve"><value>+ ещё {0}.</value></data>
+  <data name="Batch.Success.Full" xml:space="preserve"><value>Выполнено ({0}).</value></data>
+  <data name="Batch.Success.Partial" xml:space="preserve"><value>Выполнено ({0} из {1}).</value></data>
+  <data name="ConcurrencyConflict" xml:space="preserve"><value>Запись была изменена кем-то другим. Обновите страницу и попробуйте ещё раз.</value></data>
+  <data name="Cv.NotOwner" xml:space="preserve"><value>Можно управлять только своими CV.</value></data>
+  <data name="DataType_Boolean" xml:space="preserve"><value>Да/Нет</value></data>
+  <data name="DataType_Date" xml:space="preserve"><value>Дата</value></data>
+  <data name="DataType_Dropdown" xml:space="preserve"><value>Список</value></data>
+  <data name="DataType_Image" xml:space="preserve"><value>Изображение</value></data>
+  <data name="DataType_Numeric" xml:space="preserve"><value>Число</value></data>
+  <data name="DataType_Period" xml:space="preserve"><value>Период</value></data>
+  <data name="DataType_String" xml:space="preserve"><value>Строка</value></data>
+  <data name="DataType_Text" xml:space="preserve"><value>Текст</value></data>
+  <data name="Discussion.ContentRequired" xml:space="preserve"><value>Текст сообщения обязателен.</value></data>
+  <data name="Discussion.NotAllowed" xml:space="preserve"><value>Вы не можете изменить это сообщение.</value></data>
+  <data name="DuplicateEmail" xml:space="preserve"><value>Email «{0}» уже занят.</value></data>
+  <data name="DuplicateName" xml:space="preserve"><value>Запись с таким названием уже существует.</value></data>
+  <data name="DuplicateUserName" xml:space="preserve"><value>Имя пользователя «{0}» уже занято.</value></data>
+  <data name="Email.ConfirmationBody" xml:space="preserve"><value>&lt;p&gt;Подтвердите email, перейдя по ссылке:&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;{0}&quot;&gt;Подтвердить email&lt;/a&gt;&lt;/p&gt;</value></data>
+  <data name="Email.ConfirmationSubject" xml:space="preserve"><value>Подтвердите email в CvManager</value></data>
+  <data name="FormInvalid" xml:space="preserve"><value>Форма заполнена неверно.</value></data>
+  <data name="InUse" xml:space="preserve"><value>Не удалось удалить одну или несколько записей, так как они всё ещё используются.</value></data>
+  <data name="InvalidEmail" xml:space="preserve"><value>Email «{0}» некорректен.</value></data>
+  <data name="NotFound" xml:space="preserve"><value>Запись не найдена.</value></data>
+  <data name="NothingSelected" xml:space="preserve"><value>Выберите хотя бы одну запись.</value></data>
+  <data name="PasswordTooShort" xml:space="preserve"><value>Пароль должен быть длиной минимум {0} символов.</value></data>
+  <data name="Positions.Delete.InUseByCv" xml:space="preserve"><value>Позицию нельзя удалить, пока для неё существуют CV.</value></data>
+  <data name="Positions.RestrictedRequiresRule" xml:space="preserve"><value>Для ограниченной позиции нужно хотя бы одно правило доступа.</value></data>
+  <data name="Positions.Rule.OperatorNotAllowed" xml:space="preserve"><value>Этот оператор недоступен для выбранного типа атрибута.</value></data>
+  <data name="Positions.Rule.RequiresValue" xml:space="preserve"><value>Для правила доступа нужно указать значение сравнения.</value></data>
+  <data name="Positions.Rule.UnsupportedType" xml:space="preserve"><value>Выбранный тип атрибута не поддерживается в правилах доступа.</value></data>
+  <data name="Success.ConfirmationSent" xml:space="preserve"><value>Проверьте почту — мы отправили ссылку для подтверждения.</value></data>
+  <data name="Success.CvCreated" xml:space="preserve"><value>CV создано.</value></data>
+  <data name="Success.CvLiked" xml:space="preserve"><value>Лайк поставлен.</value></data>
+  <data name="Success.CvSaved" xml:space="preserve"><value>CV сохранено.</value></data>
+  <data name="Success.CvUnliked" xml:space="preserve"><value>Лайк убран.</value></data>
+  <data name="Success.EmailConfirmed" xml:space="preserve"><value>Email подтверждён. Можно войти.</value></data>
+  <data name="Success.PasswordChanged" xml:space="preserve"><value>Пароль изменён.</value></data>
+  <data name="Success.PasswordSet" xml:space="preserve"><value>Пароль установлен.</value></data>
+  <data name="Success.ProfileSaved" xml:space="preserve"><value>Профиль сохранён.</value></data>
+  <data name="Success.RecordCreated" xml:space="preserve"><value>Запись создана.</value></data>
+  <data name="Success.RecordUpdated" xml:space="preserve"><value>Запись сохранена.</value></data>
+  <data name="UserAlreadyInRole" xml:space="preserve"><value>Пользователь уже в этой роли.</value></data>
+  <data name="UserNotInRole" xml:space="preserve"><value>Пользователь не в этой роли.</value></data>
+  <data name="ValueTooLong" xml:space="preserve"><value>Одно или несколько значений слишком длинные.</value></data>
+</root>

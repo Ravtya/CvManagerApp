@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Account_AccessDenied_Title" xml:space="preserve"><value>Access denied</value></data>
+  <data name="Account_Login_ResendConfirmationLink" xml:space="preserve"><value>Resend confirmation email</value></data>
+  <data name="Account_Login_Title" xml:space="preserve"><value>Sign in</value></data>
+  <data name="Account_Register_Submit" xml:space="preserve"><value>Register</value></data>
+  <data name="Account_Settings_ChangePassword" xml:space="preserve"><value>Change password</value></data>
+  <data name="Account_Settings_SetPassword" xml:space="preserve"><value>Set password</value></data>
+  <data name="Account_Settings_Title" xml:space="preserve"><value>Account settings</value></data>
+  <data name="Admin_Index_AssignRole" xml:space="preserve"><value>Assign role</value></data>
+  <data name="Admin_Index_Col_EmailConfirm" xml:space="preserve"><value>Confirmation</value></data>
+  <data name="Admin_Index_Col_Roles" xml:space="preserve"><value>Roles</value></data>
+  <data name="Admin_Index_Col_Status" xml:space="preserve"><value>Status</value></data>
+  <data name="Admin_Index_RemoveRole" xml:space="preserve"><value>Remove role</value></data>
+  <data name="Admin_Index_Status_Active" xml:space="preserve"><value>Active</value></data>
+  <data name="Admin_Index_Status_Blocked" xml:space="preserve"><value>Blocked</value></data>
+  <data name="Admin_Index_Status_Confirmed" xml:space="preserve"><value>Confirmed</value></data>
+  <data name="Admin_Index_Status_Unconfirmed" xml:space="preserve"><value>Unconfirmed</value></data>
+  <data name="Attributes_Details_BuiltIn" xml:space="preserve"><value>Built-in</value></data>
+  <data name="Attributes_Details_Create" xml:space="preserve"><value>Create</value></data>
+  <data name="Attributes_Details_Field_DataType" xml:space="preserve"><value>Data type</value></data>
+  <data name="Attributes_Details_Field_IsBuiltIn" xml:space="preserve"><value>Built-in attribute</value></data>
+  <data name="Attributes_Details_OptionsTitle" xml:space="preserve"><value>Dropdown options</value></data>
+  <data name="Attributes_Details_Title_Create" xml:space="preserve"><value>Create attribute</value></data>
+  <data name="Attributes_Index_Col_Type" xml:space="preserve"><value>Type</value></data>
+  <data name="Cv_Details_Attributes_MasterHint" xml:space="preserve"><value>Values are stored on your profile. Changes here update the profile and all your CVs.</value></data>
+  <data name="Cv_Details_NoProjects" xml:space="preserve"><value>No matching projects.</value></data>
+  <data name="Cv_PositionCvs_Col_Candidate" xml:space="preserve"><value>Candidate</value></data>
+  <data name="Cv_PositionCvs_Header" xml:space="preserve"><value>CVs for position</value></data>
+  <data name="Cv_UserCvs_Title_MyCvs" xml:space="preserve"><value>My CVs</value></data>
+  <data name="Home_Index_LatestPositions" xml:space="preserve"><value>Latest positions</value></data>
+  <data name="Home_Index_Link_Profile" xml:space="preserve"><value>My profile</value></data>
+  <data name="Home_Index_NoPositions" xml:space="preserve"><value>No positions yet.</value></data>
+  <data name="Home_Index_NoTags" xml:space="preserve"><value>No tags yet.</value></data>
+  <data name="Home_Index_PopularPositions" xml:space="preserve"><value>Most popular positions</value></data>
+  <data name="Home_Index_Stat_Candidates" xml:space="preserve"><value>Candidates</value></data>
+  <data name="Home_Index_Stat_Cvs24h" xml:space="preserve"><value>Published (24h)</value></data>
+  <data name="Home_Index_Stat_Positions" xml:space="preserve"><value>Positions</value></data>
+  <data name="Home_Index_Stat_Recruiters" xml:space="preserve"><value>Recruiters</value></data>
+  <data name="Home_Index_TagCloud" xml:space="preserve"><value>Technology tags</value></data>
+  <data name="Home_Index_ViewAll" xml:space="preserve"><value>View all</value></data>
+  <data name="Home_Index_WelcomeTitle" xml:space="preserve"><value>CvManager</value></data>
+  <data name="Position_Details_CreateCv" xml:space="preserve"><value>Create CV</value></data>
+  <data name="Position_Details_Duplicate" xml:space="preserve"><value>Duplicate</value></data>
+  <data name="Position_Details_Field_MaxProjects" xml:space="preserve"><value>Max projects in CV</value></data>
+  <data name="Position_Details_Field_ShortDescription" xml:space="preserve"><value>Short description</value></data>
+  <data name="Position_Details_Field_TagsString" xml:space="preserve"><value>Project tag filter</value></data>
+  <data name="Position_Details_NoAttributes" xml:space="preserve"><value>No attributes found.</value></data>
+  <data name="Position_Details_OpenMyCv" xml:space="preserve"><value>Open my CV</value></data>
+  <data name="Position_Details_Title_Create" xml:space="preserve"><value>Create position</value></data>
+  <data name="Position_Discussion_Empty" xml:space="preserve"><value>No posts yet.</value></data>
+  <data name="Position_Discussion_Header" xml:space="preserve"><value>Discussion</value></data>
+  <data name="Position_Discussion_Placeholder" xml:space="preserve"><value>Write a message…</value></data>
+  <data name="Position_Discussion_Send" xml:space="preserve"><value>Send</value></data>
+  <data name="Position_Discussion_SignInToPost" xml:space="preserve"><value>Sign in to post.</value></data>
+  <data name="Position_PositionAttributeCard_AccessRestriction" xml:space="preserve"><value>Access restriction</value></data>
+  <data name="Profile_Index_Saved" xml:space="preserve"><value>Saved</value></data>
+  <data name="Profile_Index_SaveFailed" xml:space="preserve"><value>Save failed.</value></data>
+  <data name="Profile_Index_SaveFailedUnavailable" xml:space="preserve"><value>Save failed — server is unavailable.</value></data>
+  <data name="Profile_Index_SaveProfile" xml:space="preserve"><value>Save profile</value></data>
+  <data name="Profile_Index_Saving" xml:space="preserve"><value>Saving…</value></data>
+  <data name="Profile_Index_Section_Info" xml:space="preserve"><value>Info</value></data>
+  <data name="Profile_Index_Section_Me" xml:space="preserve"><value>Me</value></data>
+  <data name="Profile_Index_Unsaved" xml:space="preserve"><value>Unsaved</value></data>
+  <data name="Profile_ProjectCard_ProjectDescription" xml:space="preserve"><value>Description (Markdown)</value></data>
+  <data name="Profile_ProjectCard_ProjectName" xml:space="preserve"><value>Project name</value></data>
+  <data name="Profile_ProjectCard_TagsString" xml:space="preserve"><value>Tags</value></data>
+  <data name="Search_Index_Col_Cv" xml:space="preserve"><value>CV</value></data>
+  <data name="Search_Index_Col_Snippet" xml:space="preserve"><value>Snippet</value></data>
+  <data name="Search_Index_Cvs_Empty" xml:space="preserve"><value>No matching CVs.</value></data>
+  <data name="Search_Index_Discussions_Empty" xml:space="preserve"><value>No matching discussion posts.</value></data>
+  <data name="Search_Index_Discussions_Header" xml:space="preserve"><value>Discussions</value></data>
+  <data name="Search_Index_Empty" xml:space="preserve"><value>No results for “{0}”.</value></data>
+  <data name="Search_Index_Header" xml:space="preserve"><value>Full-text search</value></data>
+  <data name="Search_Index_Hint" xml:space="preserve"><value>Search positions, CVs, and discussions (CVs depend on your role).</value></data>
+  <data name="Search_Index_Positions_Empty" xml:space="preserve"><value>No matching positions.</value></data>
+  <data name="Shared_Access" xml:space="preserve"><value>Access</value></data>
+  <data name="Shared_AllCategories" xml:space="preserve"><value>All categories</value></data>
+  <data name="Shared_AttributeLibrary" xml:space="preserve"><value>Attribute library</value></data>
+  <data name="Shared_Attributes" xml:space="preserve"><value>Attributes</value></data>
+  <data name="Shared_Category" xml:space="preserve"><value>Category</value></data>
+  <data name="Shared_Conflict" xml:space="preserve"><value>Conflict</value></data>
+  <data name="Shared_Created" xml:space="preserve"><value>Created</value></data>
+  <data name="Shared_CVs" xml:space="preserve"><value>CVs</value></data>
+  <data name="Shared_Description" xml:space="preserve"><value>Description</value></data>
+  <data name="Shared_Email" xml:space="preserve"><value>Email</value></data>
+  <data name="Shared_Error" xml:space="preserve"><value>Error</value></data>
+  <data name="Shared_Error_Header" xml:space="preserve"><value>An error occurred</value></data>
+  <data name="Shared_Error_RequestId" xml:space="preserve"><value>Request ID</value></data>
+  <data name="Shared_Layout_Nav_Home" xml:space="preserve"><value>Home</value></data>
+  <data name="Shared_Likes" xml:space="preserve"><value>Likes</value></data>
+  <data name="Shared_Name" xml:space="preserve"><value>Name</value></data>
+  <data name="Shared_No" xml:space="preserve"><value>No</value></data>
+  <data name="Shared_Pager_Next" xml:space="preserve"><value>Next</value></data>
+  <data name="Shared_Pager_Prev" xml:space="preserve"><value>Previous</value></data>
+  <data name="Shared_Pager_Summary" xml:space="preserve"><value>Page {0} of {1} ({2})</value></data>
+  <data name="Shared_PickerPrefix" xml:space="preserve"><value>Prefix…</value></data>
+  <data name="Shared_Position" xml:space="preserve"><value>Position</value></data>
+  <data name="Shared_Positions" xml:space="preserve"><value>Positions</value></data>
+  <data name="Shared_Profile" xml:space="preserve"><value>My profile</value></data>
+  <data name="Shared_Projects" xml:space="preserve"><value>Projects</value></data>
+  <data name="Shared_Register" xml:space="preserve"><value>Register</value></data>
+  <data name="Shared_Save" xml:space="preserve"><value>Save</value></data>
+  <data name="Shared_Search" xml:space="preserve"><value>Search…</value></data>
+  <data name="Shared_Select" xml:space="preserve"><value>— Select —</value></data>
+  <data name="Shared_SignIn" xml:space="preserve"><value>Sign in</value></data>
+  <data name="Shared_TagsPlaceholder" xml:space="preserve"><value>Type a tag…</value></data>
+  <data name="Shared_Tags" xml:space="preserve"><value>Tags</value></data>
+  <data name="Shared_ThemeDark" xml:space="preserve"><value>Dark</value></data>
+  <data name="Shared_ThemeLight" xml:space="preserve"><value>Light</value></data>
+  <data name="Shared_Title" xml:space="preserve"><value>Title</value></data>
+  <data name="Shared_Users" xml:space="preserve"><value>Users</value></data>
+  <data name="Shared_Yes" xml:space="preserve"><value>Yes</value></data>
+</root>

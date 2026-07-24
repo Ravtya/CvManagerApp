@@ -1,0 +1,65 @@
+@model UserCvsDto
+@{
+    ViewData["Title"] = Model.IsOwn ? L["Cv_UserCvs_Title_MyCvs"] : $"{L["Shared_CVs"]}: {Model.ProfileEmail}";
+    if (!Model.IsOwn)
+        ViewData["PagerRoute"] = new Dictionary<string, string?> { ["userId"] = Model.ProfileUserId };
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h4 mb-0">@(Model.IsOwn ? L["Cv_UserCvs_Title_MyCvs"] : Model.ProfileEmail)</h1>
+    @if (Model.CanEdit)
+    {
+        <a class="btn btn-outline-secondary btn-sm"
+           asp-controller="Profile" asp-action="Index"
+           asp-route-userId="@(Model.IsOwn ? null : Model.ProfileUserId)">@L["Shared_Profile"]</a>
+    }
+</div>
+
+<form method="post" asp-action="Delete">
+    <input type="hidden" name="profileUserId" value="@Model.ProfileUserId"/>
+
+    @if (Model.CanEdit)
+    {
+        <div class="mb-3">
+            <button type="submit" class="btn btn-outline-secondary"><i class="bi bi-trash"></i></button>
+        </div>
+    }
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            @if (Model.CanEdit)
+            {
+                <th class="text-center">
+                    <input type="checkbox" class="form-check-input" data-select-all=".row-select"/>
+                </th>
+            }
+            <th>@L["Shared_Position"]</th>
+            <th>@L["Shared_Likes"]</th>
+            <th>@L["Shared_Created"]</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var cv in Model.Page.Items)
+        {
+            <tr>
+                @if (Model.CanEdit)
+                {
+                    <td class="text-center">
+                        <input type="checkbox" class="form-check-input row-select" name="selectedIds" value="@cv.Id"/>
+                    </td>
+                }
+                <td><a asp-action="Details" asp-route-id="@cv.Id">@cv.PositionTitle</a></td>
+                <td>@cv.LikeCount</td>
+                <td>
+                    <time data-local-time datetime="@cv.PublishedAt.UtcDateTime.ToString("o")">
+                        @cv.PublishedAt.UtcDateTime.ToString("g") UTC
+                    </time>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</form>
+
+<partial name="_Pager" model="@(new PagerModel { Page = Model.Page.Page, TotalCount = Model.Page.TotalCount })"/>

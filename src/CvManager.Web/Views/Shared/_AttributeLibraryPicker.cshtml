@@ -1,0 +1,23 @@
+@model AttributeLibraryPickerModel
+
+<div data-attr-picker
+     data-suggest-url="@Model.SuggestUrl"
+     data-row-url="@Model.RowUrl"
+     data-exclude-built-in="@(Model.ExcludeBuiltIn ? "true" : null)">
+    <div class="row g-2 mb-2">
+        <div class="col">
+            <input type="search" class="form-control form-control-sm" data-picker-q
+                   placeholder="@Model.Placeholder" autocomplete="off"/>
+        </div>
+        <div class="col-sm-4 col-md-3">
+            <select class="form-select form-select-sm" data-picker-category>
+                <option value="">@Model.AllCategoriesLabel</option>
+                @foreach (var category in Model.Categories)
+                {
+                    <option value="@category.Id">@category.Name</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="border rounded overflow-auto mb-3" style="max-height:12rem" data-picker-results></div>
+</div>

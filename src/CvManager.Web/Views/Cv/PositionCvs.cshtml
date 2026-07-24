@@ -1,0 +1,37 @@
+@model PagedResult<CvListItemDto>
+@{
+    var positionId = (int)ViewBag.PositionId;
+    ViewData["Title"] = L["Cv_PositionCvs_Header"];
+    ViewData["PagerRoute"] = new Dictionary<string, string?> { ["positionId"] = positionId.ToString() };
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h4 mb-0">@L["Cv_PositionCvs_Header"]</h1>
+    <a class="btn btn-outline-secondary btn-sm" asp-controller="Position" asp-action="Details" asp-route-id="@positionId"><i class="bi bi-arrow-left"></i></a>
+</div>
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>@L["Cv_PositionCvs_Col_Candidate"]</th>
+        <th>@L["Shared_Likes"]</th>
+        <th>@L["Shared_Created"]</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.Items)
+    {
+        <tr>
+            <td><a asp-action="Details" asp-route-id="@item.Id">@item.CandidateEmail</a></td>
+            <td>@item.LikeCount</td>
+            <td>
+                <time data-local-time datetime="@item.PublishedAt.UtcDateTime.ToString("o")">
+                    @item.PublishedAt.UtcDateTime.ToString("g") UTC
+                </time>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<partial name="_Pager" model="@(new PagerModel { Page = Model.Page, TotalCount = Model.TotalCount })"/>

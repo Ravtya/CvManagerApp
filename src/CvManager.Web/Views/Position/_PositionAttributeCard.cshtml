@@ -1,0 +1,80 @@
+@using CvManager.Domain.Rules
+@model PositionAttributeDto
+@{
+    var key = Model.AttributeDefinitionId.ToString();
+    var operators = AccessRuleOperatorRules.GetAllowedOperators(Model.DataType);
+}
+
+<div class="border rounded p-3 mb-2" data-attr-row data-attr-def-id="@Model.AttributeDefinitionId">
+    <div class="d-flex gap-2">
+        <div class="flex-grow-1">
+            <input type="hidden" name="AttributesById[@key].AttributeDefinitionId"
+                   value="@Model.AttributeDefinitionId"/>
+            <input type="hidden" name="AttributesById[@key].DataType" value="@Model.DataType"/>
+            <div class="mb-2">@Model.Name <span class="text-muted small">(@UiMessages.DataType(Model.DataType))</span>
+            </div>
+
+            @if (operators.Count > 0)
+            {
+                <div class="border-top pt-2" data-rule-block>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" data-has-rule
+                               name="AttributesById[@key].HasAccessRule"
+                               value="true" @(Model.HasAccessRule ? "checked" : null)/>
+                        <input type="hidden" name="AttributesById[@key].HasAccessRule" value="false"/>
+                        <label class="form-check-label">@L["Position_PositionAttributeCard_AccessRestriction"]</label>
+                    </div>
+
+                    <div class="row g-2" data-rule-controls>
+                        <div class="col-md-4">
+                            <select class="form-select" name="AttributesById[@key].AccessRuleOperator">
+                                @foreach (var op in operators)
+                                {
+                                    <option value="@op"
+                                            selected="@(Model.AccessRuleOperator == op ? "selected" : null)">@op</option>
+                                }
+                            </select>
+                        </div>
+                        @if (Model.DataType == AttributeDataType.String)
+                        {
+                            <div class="col-md-8">
+                                <input class="form-control" name="AttributesById[@key].ComparisonString"
+                                       value="@(Model.ComparisonString ?? "")"/>
+                            </div>
+                        }
+                        else if (Model.DataType == AttributeDataType.Numeric)
+                        {
+                            <div class="col-md-8">
+                                <input class="form-control" type="number" step="any"
+                                       name="AttributesById[@key].ComparisonNumeric"
+                                       value="@AttributeNumberFormat.Format(Model.ComparisonNumeric)"/>
+                            </div>
+                        }
+                        else if (Model.DataType == AttributeDataType.Date)
+                        {
+                            <div class="col-md-8">
+                                <input class="form-control" type="date"
+                                       name="AttributesById[@key].ComparisonDate"
+                                       value="@(Model.ComparisonDate?.ToString("yyyy-MM-dd") ?? "")"/>
+                            </div>
+                        }
+                        else if (Model.DataType == AttributeDataType.Dropdown)
+                        {
+                            <div class="col-md-8">
+                                <select class="form-select" name="AttributesById[@key].ComparisonOptionId">
+                                    <option value="">@L["Shared_Select"]</option>
+                                    @foreach (var opt in Model.DropdownOptions)
+                                    {
+                                        <option value="@opt.Id"
+                                                selected="@(Model.ComparisonOptionId == opt.Id ? "selected" : null)">@opt.Value</option>
+                                    }
+                                </select>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+        <button type="button" class="btn btn-outline-secondary align-self-start" data-remove><i class="bi bi-x-lg"></i></button>
+    </div>
+</div>

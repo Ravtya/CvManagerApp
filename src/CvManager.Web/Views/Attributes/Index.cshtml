@@ -1,0 +1,52 @@
+@model PagedResult<AttributeListItemDto>
+@{
+    ViewData["Title"] = L["Shared_AttributeLibrary"];
+    var search = ViewBag.Search as string;
+    ViewData["PagerRoute"] = new Dictionary<string, string?> { ["search"] = search };
+}
+
+<h1 class="h4 mb-3 text-center">@L["Shared_AttributeLibrary"]</h1>
+
+<partial name="_ListSearch" model="search"/>
+
+<form method="post" asp-action="Delete">
+    <div class="mb-3 d-flex gap-2">
+        <a class="btn btn-outline-secondary" asp-action="Create"><i class="bi bi-plus-lg"></i></a>
+        <button type="submit" class="btn btn-outline-secondary"><i class="bi bi-trash"></i></button>
+    </div>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th class="text-center">
+                <input type="checkbox" class="form-check-input" data-select-all=".row-select"/>
+            </th>
+            <th>@L["Shared_Category"]</th>
+            <th>@L["Shared_Name"]</th>
+            <th>@L["Shared_Description"]</th>
+            <th>@L["Attributes_Index_Col_Type"]</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td class="text-center">
+                    @if (!item.IsBuiltIn)
+                    {
+                        <input type="checkbox" class="form-check-input row-select" name="selectedIds" value="@item.Id"/>
+                    }
+                </td>
+                <td>@item.CategoryName</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">@item.Name</a>
+                </td>
+                <td class="text-muted">@item.Description</td>
+                <td>@UiMessages.DataType(item.DataType)</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</form>
+
+<partial name="_Pager" model="@(new PagerModel { Page = Model.Page, TotalCount = Model.TotalCount })"/>

@@ -1,0 +1,43 @@
+@model HomePositionTableModel
+
+<div class="table-responsive">
+    <table class="table table-sm table-bordered align-middle mb-0">
+        <thead>
+        <tr>
+            <th>@Model.TitleHeader</th>
+            <th class="@(Model.Secondary == HomePositionSecondaryColumn.CvCount ? "text-end" : null)">@Model.SecondaryHeader</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if (Model.Items.Count == 0)
+        {
+            <tr>
+                <td colspan="2" class="text-muted text-center py-4">@Model.EmptyText</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var p in Model.Items)
+            {
+                <tr>
+                    <td>
+                        <a asp-controller="Position" asp-action="Details" asp-route-id="@p.Id">@p.Title</a>
+                        @if (Model.ShowDescription && !string.IsNullOrWhiteSpace(p.ShortDescription))
+                        {
+                            <div class="text-muted small">@p.ShortDescription</div>
+                        }
+                    </td>
+                    @if (Model.Secondary == HomePositionSecondaryColumn.Access)
+                    {
+                        <td>@UiMessages.AccessMode(p.AccessMode)</td>
+                    }
+                    else
+                    {
+                        <td class="text-end">@p.CvCount</td>
+                    }
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>
