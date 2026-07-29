@@ -1,43 +1,51 @@
-(function () {
-    const ready = new WeakSet();
+import * as UC from 'https://cdn.jsdelivr.net/npm/@uploadcare/file-uploader@1/web/uc-file-uploader-regular.min.js';
 
-    function applyUrl(root, url) {
-        const urlInput = root.querySelector('input[data-image-url]');
-        const preview = root.querySelector('[data-image-preview]');
-        if (urlInput) {
-            urlInput.value = url;
-            urlInput.dispatchEvent(new Event('input', { bubbles: true }));
-            urlInput.dispatchEvent(new Event('change', { bubbles: true }));
-        }
-        if (preview) {
-            preview.src = url;
-            preview.classList.toggle('d-none', !url);
-        }
-        window.profileAutoSave?.markDirty?.();
+UC.defineComponents(UC);
+await customElements.whenDefined('uc-upload-ctx-provider');
+
+const ready = new WeakSet();
+
+function applyUrl(root, url) {
+    const input = root.querySelector('[data-image-url]');
+    const preview = root.querySelector('[data-image-preview]');
+    if (input) {
+        input.value = url;
+        input.dispatchEvent(new Event('input', { bubbles: true }));
     }
-
-    function initOne(root) {
-        if (!root || ready.has(root)) return;
-        root.querySelector('[data-image-upload-btn]')?.addEventListener('click', () => {
-            const apiKey = window.ImageUploadConfig?.apiKey;
-            if (!apiKey || typeof Bytescale?.UploadWidget === 'undefined') return;
-            Bytescale.UploadWidget.open({ apiKey, maxFileCount: 1, mimeTypes: ['image/*'] })
-                .then(files => {
-                    const url = files[0]?.fileUrl || '';
-                    if (url) applyUrl(root, url);
-                })
-                .catch(() => { });
-        });
-        root.querySelector('[data-image-clear-btn]')?.addEventListener('click', () => applyUrl(root, ''));
-        ready.add(root);
+    if (preview) {
+        preview.src = url;
+        preview.classList.toggle('d-none', !url);
     }
+    root.querySelector('[data-image-clear-btn]')?.classList.toggle('d-none', !url);
+    window.profileAutoSave?.markDirty?.();
+}
 
-    function init(scope) {
+function initOne(root) {
+    if (!root || ready.has(root)) return;
+    const ctx = root.querySelector('uc-upload-ctx-provider');
+    const pubkey = window.ImageUploadConfig?.publicKey;
+    if (pubkey) root.querySelector('uc-config')?.setAttribute('pubkey', pubkey);
+
+    root.querySelector('[data-image-upload-btn]')?.addEventListener('click', () => ctx?.getAPI()?.initFlow());
+    root.querySelector('[data-image-clear-btn]')?.addEventListener('click', () => {
+        ctx?.getAPI()?.removeAllFiles();
+        applyUrl(root, '');
+    });
+    ctx?.addEventListener('file-upload-success', e => {
+        if (!e.detail?.cdnUrl) return;
+        applyUrl(root, e.detail.cdnUrl);
+        ctx.getAPI()?.doneFlow();
+    });
+
+    ready.add(root);
+}
+
+window.ImageUpload = {
+    init(scope) {
         const root = scope?.querySelectorAll ? scope : document;
         root.querySelectorAll('[data-image-upload]').forEach(el => {
             if (!el.closest('template')) initOne(el);
         });
     }
-
-    window.ImageUpload = Object.freeze({ init });
-})();
+};
+window.ImageUpload.init();

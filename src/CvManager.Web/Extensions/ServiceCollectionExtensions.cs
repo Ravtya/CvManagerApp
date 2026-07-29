@@ -18,7 +18,7 @@ public static class ServiceCollectionExtensions
     {
         public IServiceCollection AddAppOptions(IConfiguration configuration)
         {
-            services.Configure<BytescaleOptions>(configuration.GetSection(BytescaleOptions.SectionName));
+            services.Configure<UploadcareOptions>(configuration.GetSection(UploadcareOptions.SectionName));
             services.Configure<SendGridOptions>(configuration.GetSection(SendGridOptions.SectionName));
             return services;
         }

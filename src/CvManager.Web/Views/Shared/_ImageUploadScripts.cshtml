@@ -1,15 +1,12 @@
 @using System.Text.Json
 @using CvManager.Web.Options
 @using Microsoft.Extensions.Options
-@inject IOptions<BytescaleOptions> Bytescale
-@{
-    var apiKey = Bytescale.Value.ApiKey;
-}
+@inject IOptions<UploadcareOptions> Uploadcare
 <script>
     window.ImageUploadConfig = {
-        apiKey: @Html.Raw(JsonSerializer.Serialize(apiKey))
+        publicKey: @Html.Raw(JsonSerializer.Serialize(Uploadcare.Value.PublicKey))
     };
 </script>
-<script src="https://js.bytescale.com/upload-widget/v4"></script>
-<script src="~/js/image-upload.js" asp-append-version="true"></script>
-<script>window.ImageUpload?.init();</script>
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@@uploadcare/file-uploader@1/web/uc-file-uploader-regular.min.css"/>
+<script type="module" src="~/js/image-upload.js" asp-append-version="true"></script>

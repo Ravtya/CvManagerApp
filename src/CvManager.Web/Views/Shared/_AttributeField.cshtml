@@ -4,6 +4,7 @@
     var field = Model.Field;
     var name = Model.FieldName;
     var isEdit = Model.IsEdit;
+    var imageCtx = $"img-{field.AttributeDefinitionId}";
 }
 
 @if (isEdit)
@@ -49,12 +50,16 @@
                        maxlength="@FieldLengths.Description"/>
                 <div class="d-flex flex-wrap gap-2 mb-2">
                     <button type="button" class="btn btn-outline-secondary btn-sm" data-image-upload-btn><i class="bi bi-upload"></i></button>
-                    <button type="button" class="btn btn-outline-secondary btn-sm" data-image-clear-btn><i class="bi bi-x-lg"></i></button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm@(string.IsNullOrWhiteSpace(field.ImageUrl) ? " d-none" : null)"
+                            data-image-clear-btn><i class="bi bi-x-lg"></i></button>
                 </div>
                 <img data-image-preview alt="@field.Name"
                      src="@(string.IsNullOrWhiteSpace(field.ImageUrl) ? null : field.ImageUrl)"
                      class="img-thumbnail@(string.IsNullOrWhiteSpace(field.ImageUrl) ? " d-none" : null)"
                      style="width:12rem;height:12rem;object-fit:contain"/>
+                <uc-config ctx-name="@imageCtx" img-only="true" multiple="false"></uc-config>
+                <uc-upload-ctx-provider ctx-name="@imageCtx"></uc-upload-ctx-provider>
+                <uc-file-uploader-regular ctx-name="@imageCtx" headless></uc-file-uploader-regular>
             </div>
         }
         else if (!string.IsNullOrWhiteSpace(field.ImageUrl))
