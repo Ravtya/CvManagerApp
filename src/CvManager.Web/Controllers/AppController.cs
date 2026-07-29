@@ -43,7 +43,6 @@ public abstract class AppController : Controller
         Func<Task<ServiceResult<T>>> action,
         Func<IActionResult> redirect,
         Func<T, string>? successMessage = null,
-        Func<T, Task>? afterSuccess = null,
         Func<T, IActionResult>? successRedirect = null)
     {
         if (!ModelState.IsValid)
@@ -60,9 +59,6 @@ public abstract class AppController : Controller
         }
 
         var value = result.Value!;
-        if (afterSuccess is not null)
-            await afterSuccess(value);
-
         var message = successMessage?.Invoke(value);
         if (message is not null)
             Success(message);

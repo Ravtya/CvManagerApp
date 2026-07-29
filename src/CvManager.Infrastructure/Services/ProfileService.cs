@@ -95,7 +95,7 @@ public class ProfileService(AppDbContext context)
     {
         RemoveInfoValues(profile, model.RemoveInfoValueIds);
         ProfileAttributes.Upsert(profile, WithDefinitionIds(model.MeFieldsById));
-        ProfileAttributes.Upsert(profile, WithDefinitionIds(model.InfoFieldsById), true, true);
+        ProfileAttributes.Upsert(profile, WithDefinitionIds(model.InfoFieldsById));
         await ProjectSync.SyncAsync(context, profile.Id, model.Projects, model.RemoveProjectIds);
     }
 

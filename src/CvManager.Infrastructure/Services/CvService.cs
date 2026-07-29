@@ -112,11 +112,14 @@ public class CvService(AppDbContext context)
 
     public async Task<ServiceResult<(int CvId, bool Created)>> SaveAsync(CvSaveDto model)
     {
-        var profile = await context.UserProfiles.Include(p => p.AttributeValues).FirstOrDefaultAsync(p => p.UserId == model.ProfileUserId);
+        var profile = await context.UserProfiles
+            .Include(p => p.AttributeValues)
+            .ThenInclude(v => v.Attribute)
+            .FirstOrDefaultAsync(p => p.UserId == model.ProfileUserId);
         if (profile is null) return ServiceResult<(int, bool)>.FailCode(CommonErrorCodes.NotFound);
         if (EfSave.IsRowVersionMismatch(profile.RowVersion, model.ProfileRowVersion))
             return ServiceResult<(int, bool)>.FailCode(CommonErrorCodes.ConcurrencyConflict);
-        ProfileAttributes.Upsert(profile, model.Attributes, skipEmpty: true);
+        ProfileAttributes.Upsert(profile, model.Attributes);
 
         var cv = await context.Cvs.FirstOrDefaultAsync(c => c.UserProfileId == profile.Id && c.PositionId == model.PositionId);
         var created = cv is null;

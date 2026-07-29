@@ -32,11 +32,8 @@ public static class ProjectSync
         return projects.Select(MapDto).ToList();
     }
 
-    public static async Task SyncAsync(
-        AppDbContext context,
-        int userProfileId,
-        IReadOnlyList<ProjectDto> projects,
-        IReadOnlyList<int> removeProjectIds)
+    public static async Task SyncAsync(AppDbContext context, int userProfileId,
+        IReadOnlyList<ProjectDto> projects, IReadOnlyList<int> removeProjectIds)
     {
         if (removeProjectIds.Count > 0)
         {
@@ -50,12 +47,9 @@ public static class ProjectSync
         if (named.Count == 0)
             return;
 
-        var parsed = named
-            .Select(p => (Input: p, TagNames: TagSync.ParseTagsString(p.TagsString)))
-            .ToList();
+        var parsed = named.Select(p => (Input: p, TagNames: TagSync.ParseTagsString(p.TagsString))).ToList();
 
-        var tagsByKey = await TagSync.GetOrCreateByKeyAsync(
-            context,
+        var tagsByKey = await TagSync.GetOrCreateByKeyAsync(context,
             parsed.SelectMany(x => x.TagNames).Distinct(StringComparer.OrdinalIgnoreCase).ToList());
 
         var inputIds = named.Where(p => p.Id > 0).Select(p => p.Id).ToList();
@@ -72,20 +66,13 @@ public static class ProjectSync
                 continue;
 
             ApplyFields(project, input);
-            CollectionSync.SyncByKey(
-                project.Tags,
-                tagNames.Select(n => tagsByKey[n].Id),
-                a => a.TagId,
-                tagId => new TagAssignment { TagId = tagId });
+            CollectionSync.SyncByKey(project.Tags, tagNames.Select(n => tagsByKey[n].Id),
+                a => a.TagId, tagId => new TagAssignment { TagId = tagId });
         }
     }
 
-    private static bool TryGetOrAddProject(
-        AppDbContext context,
-        int userProfileId,
-        Dictionary<int, Project> existing,
-        ProjectDto input,
-        out Project project)
+    private static bool TryGetOrAddProject(AppDbContext context, int userProfileId,
+        Dictionary<int, Project> existing, ProjectDto input, out Project project)
     {
         if (input.Id > 0)
             return existing.TryGetValue(input.Id, out project!);

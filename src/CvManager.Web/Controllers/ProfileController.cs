@@ -50,13 +50,16 @@ public class ProfileController(ProfileService profileService) : AppController
         if (!ModelState.IsValid)
             return Json(new { success = false, message = UiMessages.Text(CommonErrorCodes.FormInvalid) });
         var result = await profileService.SaveProfileAsync(model);
-        if (result.IsSuccess) return Json(new { success = true, rowVersion = result.Value });
-        return Json(new
+        if (!result.IsSuccess)
         {
-            success = false,
-            conflict = result.HasCode(CommonErrorCodes.ConcurrencyConflict),
-            message = UiMessages.FormatError(result.Errors[0])
-        });
+            return Json(new
+            {
+                success = false,
+                conflict = result.HasCode(CommonErrorCodes.ConcurrencyConflict),
+                message = UiMessages.FormatError(result.Errors[0])
+            });
+        }
+        return Json(new { success = true, rowVersion = result.Value });
     }
 
     private Access? TryAccess(string? userId)

@@ -30,8 +30,7 @@ public static class ProfileAttributes
             DropdownOptions = AttributeLookups.MapOptions(attribute.Options)
         };
 
-    public static void Upsert(UserProfile profile, IEnumerable<ProfileAttributeFieldDto> inputs,
-        bool skipEmpty = false, bool removeEmpty = false)
+    public static void Upsert(UserProfile profile, IEnumerable<ProfileAttributeFieldDto> inputs)
     {
         var byId = ToAttributeDictionary(profile);
 
@@ -41,31 +40,29 @@ public static class ProfileAttributes
 
             if (!HasValue(input))
             {
-                if (removeEmpty && value is not null)
-                    profile.AttributeValues.Remove(value);
-                else if (!skipEmpty)
-                    ApplyValue(GetOrAdd(profile, byId, input.AttributeDefinitionId), input);
+                if (value is not null)
+                {
+                    if (value.Attribute.IsBuiltIn)
+                        ApplyValue(value, input);
+                    else
+                        profile.AttributeValues.Remove(value);
+                }
+
                 continue;
             }
 
-            ApplyValue(GetOrAdd(profile, byId, input.AttributeDefinitionId), input);
+            if (value is null)
+            {
+                value = new ProfileAttributeValue
+                {
+                    UserProfileId = profile.Id,
+                    AttributeDefinitionId = input.AttributeDefinitionId,
+                };
+                profile.AttributeValues.Add(value);
+            }
+
+            ApplyValue(value, input);
         }
-    }
-
-    private static ProfileAttributeValue GetOrAdd(UserProfile profile, Dictionary<int, ProfileAttributeValue> byId,
-        int definitionId)
-    {
-        if (byId.TryGetValue(definitionId, out var value))
-            return value;
-
-        value = new ProfileAttributeValue
-        {
-            UserProfileId = profile.Id,
-            AttributeDefinitionId = definitionId,
-        };
-        profile.AttributeValues.Add(value);
-        byId[definitionId] = value;
-        return value;
     }
 
     private static bool HasValue(ProfileAttributeFieldDto input) =>

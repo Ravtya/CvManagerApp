@@ -23,23 +23,11 @@ internal static class CvProfileProjection
 
     public static List<ProjectDto> ProjectProjects(Position position, UserProfile profile)
     {
-        var filterTagIds = position.Tags
-            .Select(f => f.TagId)
-            .ToHashSet();
-
+        var filterTagIds = position.Tags.Select(f => f.TagId).ToHashSet();
         var query = profile.Projects.AsEnumerable();
-
         if (filterTagIds.Count > 0)
-        {
-            query = query.Where(p =>
-                filterTagIds.All(tagId =>
-                    p.Tags.Any(a => a.TagId == tagId)));
-        }
-
-        return query
-            .OrderByDescending(p => p.StartDate)
-            .Take(Math.Max(0, position.MaxProjectsInCv))
-            .Select(ProjectSync.MapDto)
-            .ToList();
+            query = query.Where(p => filterTagIds.All(tagId => p.Tags.Any(a => a.TagId == tagId)));
+        return query.OrderByDescending(p => p.StartDate).Take(Math.Max(0, position.MaxProjectsInCv))
+            .Select(ProjectSync.MapDto).ToList();
     }
 }
