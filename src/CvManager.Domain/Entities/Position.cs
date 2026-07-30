@@ -8,6 +8,7 @@ public class Position
     public int Id { get; set; }
     public string Title { get; set; } = string.Empty;
     public string ShortDescription { get; set; } = string.Empty;
+    public string? ApiToken { get; set; }
 
     public uint RowVersion { get; set; }
 

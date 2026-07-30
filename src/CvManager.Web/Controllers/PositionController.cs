@@ -10,8 +10,8 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace CvManager.Web.Controllers;
 
-public class PositionController(PositionService positionService, DiscussionService discussionService,
-    IHubContext<DiscussionHub> discussionHub) : AppController
+public class PositionController(PositionService positionService, PositionExportService positionExportService,
+    DiscussionService discussionService, IHubContext<DiscussionHub> discussionHub) : AppController
 {
     [HttpGet]
     [AllowAnonymous]
@@ -33,6 +33,17 @@ public class PositionController(PositionService positionService, DiscussionServi
         if (position is null) return NotFound();
         ViewBag.DiscussionPosts = await discussionService.GetPostsAsync(id);
         return View(position);
+    }
+
+    [HttpPost]
+    [Authorize(Policy = AuthorizationPolicies.RecruiterOrAdmin)]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ExportToken(int id)
+    {
+        var token = await positionExportService.EnsureTokenAsync(id);
+        if (token is null) return NotFound();
+        ViewBag.ApiUrl = Url.Action("Get", "PositionExportApi", new { token = token.ApiToken }, Request.Scheme);
+        return View(token);
     }
 
     [HttpGet]

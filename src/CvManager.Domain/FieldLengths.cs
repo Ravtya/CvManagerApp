@@ -6,6 +6,7 @@ public static class FieldLengths
     public const int CategoryName = 100;
     public const int OptionValue = 200;
     public const int Name = 300;
+    public const int Token = 64;
     public const int AttributeString = 500;
     public const int Description = 1000;
     public const int TagsString = 2_000;

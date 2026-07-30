@@ -36,6 +36,7 @@ public static class ServiceCollectionExtensions
             services.AddScoped<AttributeService>();
             services.AddScoped<ProfileService>();
             services.AddScoped<PositionService>();
+            services.AddScoped<PositionExportService>();
             services.AddScoped<CvService>();
             services.AddScoped<DiscussionService>();
             services.AddScoped<SearchService>();

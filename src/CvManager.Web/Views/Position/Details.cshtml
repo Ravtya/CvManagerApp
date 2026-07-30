@@ -24,6 +24,10 @@
             </form>
             <a class="btn btn-outline-secondary" asp-controller="Cv" asp-action="PositionCvs"
                asp-route-positionId="@Model.Id">@L["Shared_CVs"]</a>
+            <form method="post" asp-action="ExportToken" class="d-inline">
+                <input type="hidden" name="id" value="@Model.Id"/>
+                <button type="submit" class="btn btn-outline-secondary">Odoo API token</button>
+            </form>
         }
         @if (!Model.IsNew && Model.MyCvId is int myCvId)
         {

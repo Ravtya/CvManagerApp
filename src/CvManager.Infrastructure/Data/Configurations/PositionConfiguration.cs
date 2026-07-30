@@ -21,6 +21,12 @@ public class PositionConfiguration : IEntityTypeConfiguration<Position>
             .IsRequired()
             .HasMaxLength(FieldLengths.Description);
 
+        builder.Property(x => x.ApiToken)
+            .HasMaxLength(FieldLengths.Token);
+
+        builder.HasIndex(x => x.ApiToken)
+            .IsUnique();
+
         builder.Property(x => x.AccessMode)
             .HasConversion<string>()
             .HasMaxLength(FieldLengths.EnumLabel);

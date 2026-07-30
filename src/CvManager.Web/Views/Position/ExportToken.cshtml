@@ -1,0 +1,22 @@
+@model PositionTokenDto
+@{
+    ViewData["Title"] = "Odoo API token";
+}
+
+<h1 class="h4 mb-3">Odoo API token</h1>
+
+<div class="card">
+    <div class="card-body">
+        <h2 class="h6">@Model.PositionTitle</h2>
+
+        <label class="form-label" for="api-token">Token</label>
+        <input id="api-token" class="form-control font-monospace mb-3" readonly value="@Model.ApiToken"/>
+
+        <label class="form-label" for="api-url">API URL</label>
+        <input id="api-url" class="form-control font-monospace" readonly value="@ViewBag.ApiUrl"/>
+    </div>
+</div>
+
+<a class="btn btn-outline-secondary mt-3" asp-action="Details" asp-route-id="@Model.PositionId">
+    Back to position
+</a>

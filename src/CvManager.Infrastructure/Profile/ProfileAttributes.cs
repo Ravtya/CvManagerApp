@@ -1,5 +1,6 @@
 using CvManager.Application.Dtos.Profile;
 using CvManager.Domain.Entities;
+using CvManager.Domain.Enums;
 using CvManager.Infrastructure.Attributes;
 
 namespace CvManager.Infrastructure.Profile;
@@ -8,6 +9,20 @@ public static class ProfileAttributes
 {
     public static Dictionary<int, ProfileAttributeValue> ToAttributeDictionary(UserProfile profile) =>
         profile.AttributeValues.ToDictionary(v => v.AttributeDefinitionId);
+
+    public static bool HasValue(ProfileAttributeValue value, AttributeDataType type) =>
+        type switch
+        {
+            AttributeDataType.String => !string.IsNullOrWhiteSpace(value.StringValue),
+            AttributeDataType.Text => !string.IsNullOrWhiteSpace(value.TextValue),
+            AttributeDataType.Image => !string.IsNullOrWhiteSpace(value.ImageUrl),
+            AttributeDataType.Numeric => value.NumericValue.HasValue,
+            AttributeDataType.Date => value.DateValue.HasValue,
+            AttributeDataType.Period => value.PeriodStart.HasValue || value.PeriodEnd.HasValue,
+            AttributeDataType.Boolean => value.BooleanValue.HasValue,
+            AttributeDataType.Dropdown => value.DropdownOptionId.HasValue,
+            _ => false,
+        };
 
     public static ProfileAttributeFieldDto MapField(AttributeDefinition attribute, ProfileAttributeValue? value = null) =>
         new()
