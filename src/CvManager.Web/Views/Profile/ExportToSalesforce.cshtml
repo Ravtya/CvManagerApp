@@ -1,0 +1,91 @@
+@model SalesforceExportDto
+@{
+    ViewData["Title"] = "Export to Salesforce";
+    var backUserId = ViewBag.IsOwnProfile == true ? null : Model.ProfileUserId;
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+    <h1 class="h4 mb-0">Export to Salesforce</h1>
+</div>
+
+<form asp-action="ExportToSalesforce" method="post" class="col-lg-8">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    <input type="hidden" asp-for="ProfileUserId"/>
+
+    <section class="mb-4">
+        <h2 class="h5 mb-3">Contact</h2>
+
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label">Email</label>
+            <input asp-for="Email" class="form-control"/>
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="row g-3 mb-3">
+            <div class="col-md-6">
+                <label asp-for="FirstName" class="form-label">First name</label>
+                <input asp-for="FirstName" class="form-control"/>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="LastName" class="form-label">Last name</label>
+                <input asp-for="LastName" class="form-control"/>
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Phone" class="form-label">Phone</label>
+            <input asp-for="Phone" class="form-control"/>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Title" class="form-label">Job title</label>
+            <input asp-for="Title" class="form-control"/>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label">Description</label>
+            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+        </div>
+    </section>
+
+    <section class="mb-4">
+        <h2 class="h5 mb-3">Account</h2>
+
+        <div class="mb-3">
+            <label asp-for="AccountName" class="form-label">Name</label>
+            <input asp-for="AccountName" class="form-control"/>
+            <span asp-validation-for="AccountName" class="text-danger"></span>
+        </div>
+
+        <div class="row g-3 mb-3">
+            <div class="col-md-6">
+                <label asp-for="AccountWebsite" class="form-label">Website</label>
+                <input asp-for="AccountWebsite" class="form-control"/>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="AccountPhone" class="form-label">Phone</label>
+                <input asp-for="AccountPhone" class="form-control"/>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="AccountIndustry" class="form-label">Industry</label>
+            <input asp-for="AccountIndustry" class="form-control"/>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="AccountDescription" class="form-label">Description</label>
+            <textarea asp-for="AccountDescription" class="form-control" rows="3"></textarea>
+        </div>
+    </section>
+
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary">Export</button>
+        <a class="btn btn-outline-secondary" asp-action="Index" asp-route-userId="@backUserId">Cancel</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+}

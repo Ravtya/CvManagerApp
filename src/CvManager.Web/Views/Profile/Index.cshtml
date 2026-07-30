@@ -22,6 +22,12 @@
         {
             <a class="btn btn-outline-secondary btn-sm" asp-controller="Admin" asp-action="Index"><i class="bi bi-arrow-left"></i></a>
         }
+        @if (Model.IsOwnProfile || User.IsInRole(RoleNames.Administrator))
+        {
+            <a class="btn btn-outline-primary btn-sm"
+               asp-action="ExportToSalesforce"
+               asp-route-userId="@(Model.IsOwnProfile ? null : Model.ProfileUserId)">Export to Salesforce</a>
+        }
         @if (Model.IsOwnProfile)
         {
             <a class="btn btn-outline-secondary btn-sm" asp-controller="Account" asp-action="Settings"><i class="bi bi-gear"></i></a>

@@ -1,5 +1,6 @@
 using CvManager.Application.Common.ErrorsCodes;
 using CvManager.Application.Dtos.Profile;
+using CvManager.Infrastructure.Salesforce;
 using CvManager.Infrastructure.Services;
 using CvManager.Web.Extensions;
 using CvManager.Web.Ui;
@@ -9,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CvManager.Web.Controllers;
 
 [Authorize]
-public class ProfileController(ProfileService profileService) : AppController
+public class ProfileController(ProfileService profileService, SalesforceService salesforceService) : AppController
 {
     [HttpGet]
     public async Task<IActionResult> Index(string? userId)
@@ -39,6 +40,31 @@ public class ProfileController(ProfileService profileService) : AppController
     {
         var field = await profileService.GetInfoFieldTemplateAsync(defId);
         return field is null ? NotFound() : PartialView("_ProfileInfoFieldRow", field);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> ExportToSalesforce(string? userId)
+    {
+        var access = TryAccess(userId);
+        if (access is null) return Forbid();
+        var form = await profileService.GetSalesforceExportАFormAsync(access.ProfileUserId);
+        if (form is null) return NotFound();
+        ViewBag.IsOwnProfile = access.IsOwn;
+        return View(form);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ExportToSalesforce(SalesforceExportDto model)
+    {
+        var access = TryAccess(model.ProfileUserId);
+        if (access is null) return Forbid();
+        ViewBag.IsOwnProfile = access.IsOwn;
+        return await RunAndRedirectAsync(
+            () => salesforceService.ExportAsync(model),
+            () => View(model),
+            _ => SuccessMessageCodes.SalesforceExportSuccess,
+            _ => RedirectToAction(nameof(Index), Route(access)));
     }
 
     [HttpPost]

@@ -18,6 +18,28 @@ public class ProfileService(AppDbContext context)
         return profile is null ? null : await MapProfileAsync(profile);
     }
 
+    public async Task<SalesforceExportDto?> GetSalesforceExportАFormAsync(string profileUserId)
+    {
+        var page = await GetProfileAsync(profileUserId);
+        if (page is null)
+            return null;
+
+        var firstName = FindMeValue(page, "First Name");
+        var lastName = FindMeValue(page, "Last Name") ?? page.ProfileEmail;
+        var phone = FindMeValue(page, "Phone");
+
+        return new SalesforceExportDto
+        {
+            ProfileUserId = profileUserId,
+            Email = page.ProfileEmail,
+            FirstName = firstName,
+            LastName = lastName,
+            Phone = phone,
+            AccountName = $"{firstName} {lastName}".Trim(),
+            AccountPhone = phone
+        };
+    }
+
     public async Task CreateProfileAsync(string userId)
     {
         var profile = new UserProfile { UserId = userId };
@@ -117,6 +139,9 @@ public class ProfileService(AppDbContext context)
         foreach (var value in toRemove)
             profile.AttributeValues.Remove(value);
     }
+
+    private static string? FindMeValue(ProfileDto page, string attributeName) => page.MeFieldsById.Values
+        .FirstOrDefault(f => string.Equals(f.Name, attributeName, StringComparison.OrdinalIgnoreCase))?.StringValue;
 
     private Task<UserProfile?> LoadProfileForUpdateAsync(string profileUserId) =>
         context.UserProfiles

@@ -61,3 +61,8 @@ public static class AuthErrorCodes
     public const string ExternalAccountCreateFailed = "Auth.ExternalAccountCreateFailed";
     public const string ExternalAccountLinkFailed = "Auth.ExternalAccountLinkFailed";
 }
+
+public static class SalesforceErrorCodes
+{
+    public const string ExportFailed = "Salesforce.ExportFailed";
+}
