@@ -3,6 +3,7 @@ using CvManager.Domain;
 using CvManager.Infrastructure.Data;
 using CvManager.Infrastructure.Salesforce;
 using CvManager.Infrastructure.Services;
+using CvManager.Infrastructure.Support;
 using CvManager.Web.Options;
 using CvManager.Web.Security;
 using CvManager.Web.Services;
@@ -22,6 +23,7 @@ public static class ServiceCollectionExtensions
             services.Configure<UploadcareOptions>(configuration.GetSection(UploadcareOptions.SectionName));
             services.Configure<SendGridOptions>(configuration.GetSection(SendGridOptions.SectionName));
             services.Configure<SalesforceOptions>(configuration.GetSection(SalesforceOptions.SectionName));
+            services.Configure<SupportOptions>(configuration.GetSection(SupportOptions.SectionName));
             return services;
         }
 
@@ -42,6 +44,7 @@ public static class ServiceCollectionExtensions
             services.AddScoped<SearchService>();
             services.AddScoped<EmailService>();
             services.AddScoped<SalesforceService>();
+            services.AddScoped<SupportService>();
             return services;
         }
 

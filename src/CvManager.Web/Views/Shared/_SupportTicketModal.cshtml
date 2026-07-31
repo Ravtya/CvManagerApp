@@ -1,0 +1,27 @@
+@{
+    var returnUrl = $"{Context.Request.Path}{Context.Request.QueryString}";
+    var position = ViewData["PositionTitle"] as string ?? string.Empty;
+}
+<div class="modal fade" id="supportTicketModal" tabindex="-1">
+    <div class="modal-dialog">
+        <form method="post" asp-controller="Support" asp-action="Create" class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create support ticket</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="returnUrl" value="@returnUrl"/>
+                <input type="hidden" name="Position" value="@position"/>
+
+                <label class="form-label">Summary</label>
+                <textarea name="Summary" class="form-control mb-3" rows="3" required></textarea>
+
+                <label class="form-label">Priority</label>
+                <select name="Priority" class="form-select" asp-items="Html.GetEnumSelectList<PriorityType>()"></select>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>

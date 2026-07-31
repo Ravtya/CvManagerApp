@@ -12,4 +12,5 @@ public static class SuccessMessageCodes
     public const string EmailConfirmed = "Success.EmailConfirmed";
     public const string ConfirmationSent = "Success.ConfirmationSent";
     public const string SalesforceExportSuccess = "Salesforce.ExportSuccess";
+    public const string SupportTicketCreated = "Success.SupportTicketCreated";
 }

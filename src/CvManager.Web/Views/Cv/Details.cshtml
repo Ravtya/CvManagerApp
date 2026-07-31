@@ -1,6 +1,7 @@
 @model CvDetailsDto
 @{
     ViewData["Title"] = Model.PositionTitle;
+    ViewData["PositionTitle"] = Model.PositionTitle;
     var needsImageUpload = Model.CanEdit && Model.Attributes.Any(a => a.DataType == AttributeDataType.Image);
 }
 
