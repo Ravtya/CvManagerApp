@@ -60,6 +60,7 @@
   <data name="Success.PasswordSet" xml:space="preserve"><value>Пароль установлен.</value></data>
   <data name="Success.ProfileSaved" xml:space="preserve"><value>Профиль сохранён.</value></data>
   <data name="Salesforce.ExportFailed" xml:space="preserve"><value>Не удалось экспортировать профиль в Salesforce.</value></data>
+  <data name="Support.SendFailed" xml:space="preserve"><value>Не удалось отправить тикет поддержки.</value></data>
   <data name="Salesforce.ExportSuccess" xml:space="preserve"><value>Профиль экспортирован в Salesforce.</value></data>
   <data name="Success.RecordCreated" xml:space="preserve"><value>Запись создана.</value></data>
   <data name="Success.RecordUpdated" xml:space="preserve"><value>Запись сохранена.</value></data>

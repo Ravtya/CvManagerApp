@@ -12,6 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Dropbox.Api" Version="7.2.0" />
       <PackageReference Include="EntityFrameworkCore.Exceptions.Common" Version="10.0.1" />
       <PackageReference Include="EntityFrameworkCore.Exceptions.PostgreSQL" Version="10.0.1" />
       <PackageReference Include="LinqKit.Microsoft.EntityFrameworkCore" Version="10.0.11" />

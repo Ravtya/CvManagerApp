@@ -19,7 +19,7 @@ public class SupportController(SupportService supportService) : AppController
         ticket.Link = $"{Request.Scheme}://{Request.Host}{returnUrl}";
 
         return await RunAndRedirectAsync(
-            () => supportService.CreateTicketAsync(ticket),
+            () => supportService.SendTicketAsync(ticket),
             () => LocalRedirect(returnUrl ?? "/"),
             _ => SuccessMessageCodes.SupportTicketCreated);
     }
