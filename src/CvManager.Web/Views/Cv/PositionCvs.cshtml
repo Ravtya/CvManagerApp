@@ -2,6 +2,7 @@
 @{
     var positionId = (int)ViewBag.PositionId;
     ViewData["Title"] = L["Cv_PositionCvs_Header"];
+    ViewData["PositionTitle"] = Model.Items.FirstOrDefault()?.PositionTitle;
     ViewData["PagerRoute"] = new Dictionary<string, string?> { ["positionId"] = positionId.ToString() };
 }
 

@@ -1,6 +1,8 @@
 @model PositionFormDto
 @{
     ViewData["Title"] = Model.IsNew ? L["Position_Details_Title_Create"] : Model.Title;
+    if (!Model.IsNew)
+        ViewData["PositionTitle"] = Model.Title;
     var canEdit = User.CanManageRecruiting();
     var showDiscussion = Model is { IsNew: false, Id: not null };
     var accessModes = Enum.GetValues<PositionAccessMode>()

@@ -60,9 +60,11 @@
   <data name="Success.PasswordSet" xml:space="preserve"><value>Password set successfully.</value></data>
   <data name="Success.ProfileSaved" xml:space="preserve"><value>Profile saved.</value></data>
   <data name="Salesforce.ExportFailed" xml:space="preserve"><value>Could not export profile to Salesforce.</value></data>
+  <data name="Support.SendFailed" xml:space="preserve"><value>Could not submit support ticket.</value></data>
   <data name="Salesforce.ExportSuccess" xml:space="preserve"><value>Profile exported to Salesforce.</value></data>
   <data name="Success.RecordCreated" xml:space="preserve"><value>Record created.</value></data>
   <data name="Success.RecordUpdated" xml:space="preserve"><value>Record saved.</value></data>
+  <data name="Success.SupportTicketCreated" xml:space="preserve"><value>Support ticket submitted.</value></data>
   <data name="UserAlreadyInRole" xml:space="preserve"><value>User is already in this role.</value></data>
   <data name="UserNotInRole" xml:space="preserve"><value>User is not in this role.</value></data>
   <data name="ValueTooLong" xml:space="preserve"><value>One or more values are too long.</value></data>

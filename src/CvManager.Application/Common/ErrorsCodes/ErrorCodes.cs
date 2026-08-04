@@ -66,3 +66,8 @@ public static class SalesforceErrorCodes
 {
     public const string ExportFailed = "Salesforce.ExportFailed";
 }
+
+public static class SupportErrorCodes
+{
+    public const string SendFailed = "Support.SendFailed";
+}
