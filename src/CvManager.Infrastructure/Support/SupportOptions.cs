@@ -5,5 +5,7 @@ public class SupportOptions
     public const string SectionName = "Support";
     
     public List<string> AdminEmails { get; set; } = [];
-    public string AccessToken { get; set; } = string.Empty;
+    public string AppKey { get; set; } = string.Empty;
+    public string AppSecret { get; set; } = string.Empty;
+    public string RefreshToken { get; set; } = string.Empty;
 }

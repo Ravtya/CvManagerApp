@@ -20,7 +20,7 @@ public class SupportService(IOptions<SupportOptions> options)
             ticket.AdminEmails = _options.AdminEmails;
             var json = JsonSerializer.Serialize(ticket);
             var path = $"/ticket-{DateTime.Now:yyyyMMdd-HHmmss}-{Guid.NewGuid().ToString("N")[..8]}.json";
-            using var client = new DropboxClient(_options.AccessToken);
+            using var client = new DropboxClient(_options.RefreshToken,  _options.AppKey, _options.AppSecret);
             using var stream = new MemoryStream(Encoding.UTF8.GetBytes(json));
             await client.Files.UploadAsync(path, WriteMode.Add.Instance, body: stream);
             return ServiceResult<string>.Ok(path);
