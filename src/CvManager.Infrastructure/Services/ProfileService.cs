@@ -18,7 +18,7 @@ public class ProfileService(AppDbContext context)
         return profile is null ? null : await MapProfileAsync(profile);
     }
 
-    public async Task<SalesforceExportDto?> GetSalesforceExportАFormAsync(string profileUserId)
+    public async Task<SalesforceExportDto?> GetSalesforceExportFormAsync(string profileUserId)
     {
         var page = await GetProfileAsync(profileUserId);
         if (page is null)

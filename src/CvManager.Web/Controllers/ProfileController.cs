@@ -47,7 +47,7 @@ public class ProfileController(ProfileService profileService, SalesforceService 
     {
         var access = TryAccess(userId);
         if (access is null) return Forbid();
-        var form = await profileService.GetSalesforceExportАFormAsync(access.ProfileUserId);
+        var form = await profileService.GetSalesforceExportFormAsync(access.ProfileUserId);
         if (form is null) return NotFound();
         ViewBag.IsOwnProfile = access.IsOwn;
         return View(form);

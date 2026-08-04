@@ -42,7 +42,6 @@ public class PositionController(PositionService positionService, PositionExportS
     {
         var token = await positionExportService.EnsureTokenAsync(id);
         if (token is null) return NotFound();
-        ViewBag.ApiUrl = Url.Action("Get", "PositionExportApi", new { token = token.ApiToken }, Request.Scheme);
         return View(token);
     }
 
